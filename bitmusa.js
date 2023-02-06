@@ -49,18 +49,44 @@ class Bitmusa {
 
         let options = {
             url: this.options.baseURL + path,
-            method: method,
+            json: true,
+            method: method.toUpperCase(),
             timeout: this.options.timeOut,
             headers: {
-                'x-auth-token': this.options.authKey
+                'x-auth-token': this.options.authKey,
+                'Content-Type': 'application/json'
             }
         };
 
         if (parameter) {
-            options = Object.assign(options, { data: parameter });
+            options = Object.assign(options, { body: parameter });
         }
 
+        console.log(options);
+
         return options;
+    }
+
+    signIn(email, password) {
+        return new Promise((resolve, reject) => {
+            request(this.buildRequestOptions("/users/v1/signin", 'POST', { email: email, password: password }), (error, response, body) => {
+                
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
+                    }
+
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
+                    if (json.code !== 0) {
+                        reject(json);
+                    } else {
+                        resolve(json);
+                    }
+                }
+            });
+        });
     }
 
     balance() {
@@ -74,7 +100,7 @@ class Bitmusa {
                         reject("statusCode : " + response.statusCode);
                     }
 
-                    let json = JSON.parse(body);
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
                     if (json.code !== 0) {
                         reject(json);
                     } else {
@@ -112,7 +138,7 @@ class Bitmusa {
                         reject("statusCode : " + response.statusCode);
                     }
 
-                    let json = JSON.parse(body);
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
                     if (json.code !== 0) {
                          reject(json);
                     } else {
