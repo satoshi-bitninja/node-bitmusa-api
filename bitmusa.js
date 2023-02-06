@@ -75,7 +75,7 @@ class Bitmusa {
                     }
 
                     let json = JSON.parse(body);
-                    if (json.code === 4000) {
+                    if (json.code !== 0) {
                         reject(json);
                     } else {
                         resolve(json);
@@ -85,6 +85,43 @@ class Bitmusa {
         });
     }
 
+    buy(pair, amount, type = null, price = null) {
+        var opts = { 
+            symbol : pair, 
+            amount : amount,
+            direction : 'buy'
+        };
+
+        if (type === null) {
+            opts = Object.assign(opts, { type: 'MARKET' });
+        }
+
+        if (type === 'LIMIT_PRICE') {
+            // if price is null throw error
+            if (price === null) {
+                throw new Error('[buy] price is null');
+            }
+        }
+
+        return new Promise((resolve, reject) => {
+            request(this.buildRequestOptions("/exchange/order/add", 'POST'), (error, response, body) => {
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
+                    }
+
+                    let json = JSON.parse(body);
+                    if (json.code !== 0) {
+                         reject(json);
+                    } else {
+                         resolve(json);
+                    }
+                }
+            });
+        });
+    }
 }
 
 // export the class
