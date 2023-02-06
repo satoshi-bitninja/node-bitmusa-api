@@ -1,4 +1,5 @@
 const request = require('request');
+const querystring = require('querystring');
 
 class Bitmusa {
     constructor(options = {}) {
@@ -52,11 +53,16 @@ class Bitmusa {
             json: true,
             method: method.toUpperCase(),
             timeout: this.options.timeOut,
+            cache: false,
             headers: {
                 'x-auth-token': this.options.authKey,
                 'Content-Type': 'application/json'
             }
         };
+
+        if ((method.toUpperCase() === 'GET') && (parameter)) {
+            options.url += '?' + querystring.stringify(parameter);
+        }
 
         if (parameter) {
             options = Object.assign(options, { body: parameter });
@@ -87,7 +93,7 @@ class Bitmusa {
                 }
             });
         });
-    }
+    } // end of signIn
 
     balance() {
         return new Promise((resolve, reject) => {
@@ -109,17 +115,17 @@ class Bitmusa {
                 }
             });
         });
-    }
+    } // end of balance
 
     buy(pair, amount, type = null, price = null) {
-        var opts = { 
+        var options = { 
             symbol : pair, 
-            amount : amount,
-            direction : 'buy'
+            amount : amount+"",
+            direction : 'BUY'
         };
 
-        if (type === null) {
-            opts = Object.assign(opts, { type: 'MARKET' });
+        if ((type === null) || (type === 'MARKET_PRICE')) {
+            options = Object.assign(options, { type: 'MARKET_PRICE', price: "0" });
         }
 
         if (type === 'LIMIT_PRICE') {
@@ -127,10 +133,12 @@ class Bitmusa {
             if (price === null) {
                 throw new Error('[buy] price is null');
             }
+
+            options = Object.assign(options, { type: 'LIMIT_PRICE', price: price+"" });
         }
 
         return new Promise((resolve, reject) => {
-            request(this.buildRequestOptions("/exchange/order/add", 'POST'), (error, response, body) => {
+            request(this.buildRequestOptions("/exchange/order/add", 'GET', options), (error, response, body) => {
                 if (error)
                     reject(error);
                 else {
@@ -147,7 +155,68 @@ class Bitmusa {
                 }
             });
         });
-    }
+    } // end of buy
+
+    sell(pair, amount, type = null, price = null) {
+        var options = { 
+            symbol : pair, 
+            amount : amount+"",
+            direction : 'SELL'
+        };
+
+        if ((type === null) || (type === 'MARKET_PRICE')) {
+            options = Object.assign(options, { type: 'MARKET_PRICE', price: "0" });
+        }
+
+        if (type === 'LIMIT_PRICE') {
+            // if price is null throw error
+            if (price === null) {
+                throw new Error('[sell] price is null');
+            }
+
+            options = Object.assign(options, { type: 'LIMIT_PRICE', price: price+"" });
+        }
+
+        return new Promise((resolve, reject) => {
+            request(this.buildRequestOptions("/exchange/order/add", 'GET', options), (error, response, body) => {
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
+                    }
+
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
+                    if (json.code !== 0) {
+                         reject(json);
+                    } else {
+                         resolve(json);
+                    }
+                }
+            });
+        });
+    } // end of sell
+
+    cancel(orderId) {
+        return new Promise((resolve, reject) => {
+            request(this.buildRequestOptions("/exchange/order/cancel/"+orderId, 'GET'), (error, response, body) => {
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
+                    }
+
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
+                    if (json.code !== 0) {
+                         reject(json);
+                    } else {
+                         resolve(json);
+                    }
+                }
+            });
+        });
+    } // end of cancelOrder
 }
 
 // export the class
