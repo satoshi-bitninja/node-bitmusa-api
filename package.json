@@ -1,0 +1,19 @@
+{
+  "name": "node-bitmusa-api",
+  "version": "1.0.1",
+  "description": "bitmusa api wrapper",
+  "author": "satoshi@bitninja.dev",
+  "dependencies": {
+    "install": "^0.13.0",
+    "querystring": "^0.2.1",
+    "request": "^2.88.2"
+  },
+  "license": "MIT",
+  "keywords": [
+    "bitmusa", "api", "crypto", "exchange"
+  ],
+  "main": "bitmusa.js",   
+  "devDependencies": {
+    "jsdoc": "^4.0.2"
+  }
+}
