@@ -1,3 +1,4 @@
 node_modules/
 test.js
 prev_bitmusa.js
+.DS_Store
