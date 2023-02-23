@@ -325,6 +325,7 @@ class Bitmusa {
      * @throws {Error} If the symbol is empty.
      */
     ticker(symbol="") {
+        symbol = symbol.toUpperCase();
         return new Promise((resolve, reject) => {
             request(this.buildRequestOptions("/market/symbol-thumb", 'GET'), (error, response, body) => {
                 if (error)
