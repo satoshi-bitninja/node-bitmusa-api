@@ -336,11 +336,43 @@ class Bitmusa {
                     }
 
                     let json = typeof body === 'object' ? body : JSON.parse(body);
-                    var price = json.find((item) => item.symbol == symbol);
-                    if (price === undefined || price === null) {
-                        reject("symbol not found");
+                    var ticker = json.find((item) => item.symbol == symbol);
+                    if (ticker === undefined || ticker === null) {
+                        reject("ticker not found");
                     } else {
-                        resolve(price);
+                        resolve(ticker);
+                    }
+                }
+            });
+        });
+
+    }
+
+    /**
+     * Retrieves the Price from the Bitmusa API.
+     * 
+     * @param {string} symbol - The symbol to retrieve (ex> "BTC/USDT", default is empty).
+     * @returns {Promise} A Promise that resolves with the response body if the orders are retrieved successfully, or rejects with an error message otherwise.
+     * @throws {Error} If the symbol is empty.
+     * 
+     */
+    price(symbol="") {
+        symbol = symbol.toUpperCase();
+        return new Promise((resolve, reject) => {
+            request(this.buildRequestOptions("/market/symbol-thumb", 'GET'), (error, response, body) => {
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
+                    }
+
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
+                    var ticker = json.find((item) => item.symbol == symbol);
+                    if (ticker === undefined || ticker === null) {
+                        reject("ticker not found");
+                    } else {
+                        resolve(ticker.close);
                     }
                 }
             });
