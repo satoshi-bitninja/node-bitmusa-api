@@ -388,7 +388,26 @@ class Bitmusa {
 
     }
 
+    wallet(){
+        return new Promise((resolve, reject) => {
+                request(this.buildRequestOptions("users/asset/wallet", 'GET'), (error, response, body) => {
+                    if (error)
+                        reject(error);
+                    else {
+                        if (response.statusCode !== 200) {
+                            reject("statusCode : " + response.statusCode);
+                        }
     
+                        let json = typeof body === 'object' ? body : JSON.parse(body);
+                        if (json.code !== 0) {
+                             reject(json);
+                        } else {
+                             resolve(json);
+                        }   
+                    }
+                });
+        });
+    }
 }
 
 
