@@ -388,24 +388,34 @@ class Bitmusa {
 
     }
 
+    /**
+     * Retrieves the user's wallet from the Bitmusa API.
+     * @returns {Promise} A Promise that resolves with the response body if the wallet is retrieved successfully, or rejects with an error message otherwise.
+     * @throws {Error} If the wallet is not found.
+     * @throws {Error} If the response status code is not 200.
+     * @throws {Error} If the response code is not 0.
+     * @throws {Error} If the response message is not "success".
+     * @throws {Error} If the response data is not found.
+     * @throws {Error} If the response data is not an array.
+     */
     wallet(){
         return new Promise((resolve, reject) => {
-                request(this.buildRequestOptions("users/asset/wallet", 'GET'), (error, response, body) => {
-                    if (error)
-                        reject(error);
-                    else {
-                        if (response.statusCode !== 200) {
-                            reject("statusCode : " + response.statusCode);
-                        }
-    
-                        let json = typeof body === 'object' ? body : JSON.parse(body);
-                        if (json.code !== 0) {
-                             reject(json);
-                        } else {
-                             resolve(json);
-                        }   
+            request(this.buildRequestOptions("/users/asset/wallet", 'GET'), (error, response, body) => {
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
                     }
-                });
+                        
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
+                    if (json.code !== 0) {
+                            reject(json);
+                    } else {
+                            resolve(json);
+                    }   
+                }
+            });
         });
     }
 }
