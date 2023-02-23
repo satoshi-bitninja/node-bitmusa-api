@@ -320,12 +320,17 @@ class Bitmusa {
 
     /**
      * Retrieves the Ticker from the Bitmusa API.
-     * @param {string} symbol - The symbol to retrieve (ex> "BTC/USDT", default is empty).
-     * @returns {Promise} A Promise that resolves with the response body if the orders are retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the symbol is empty.
+     * @param {string} targetSymbol - The target symbol to retrieve.
+     * @param {string} baseSymbol - The base symbol to retrieve.
+     * @returns {Promise} A Promise that resolves with the response body if the ticker is retrieved successfully, or rejects with an error message otherwise.
+     * @throws {Error} If the ticker is not found.
      */
-    ticker(symbol="") {
-        symbol = symbol.toUpperCase();
+    
+    ticker(targetSymbol="", baseSymbol="USDT") {
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}/${baseSymbol}`;
+
         return new Promise((resolve, reject) => {
             request(this.buildRequestOptions("/market/symbol-thumb", 'GET'), (error, response, body) => {
                 if (error)
@@ -336,7 +341,7 @@ class Bitmusa {
                     }
 
                     let json = typeof body === 'object' ? body : JSON.parse(body);
-                    var ticker = json.find((item) => item.symbol == symbol);
+                    var ticker = json.find((item) => item.symbol == pair);
                     if (ticker === undefined || ticker === null) {
                         reject("ticker not found");
                     } else {
@@ -351,13 +356,16 @@ class Bitmusa {
     /**
      * Retrieves the Price from the Bitmusa API.
      * 
-     * @param {string} symbol - The symbol to retrieve (ex> "BTC/USDT", default is empty).
+     * @param {string} targetSymbol - The target symbol to retrieve (ex> "BTC", default is empty).
+     * @param {string} baseSymbol - The base symbol to retrieve (ex> "USDT", default is empty).
      * @returns {Promise} A Promise that resolves with the response body if the orders are retrieved successfully, or rejects with an error message otherwise.
      * @throws {Error} If the symbol is empty.
-     * 
      */
-    price(symbol="") {
-        symbol = symbol.toUpperCase();
+    price(targetSymbol="", baseSymbol="USDT") {
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}/${baseSymbol}`;
+
         return new Promise((resolve, reject) => {
             request(this.buildRequestOptions("/market/symbol-thumb", 'GET'), (error, response, body) => {
                 if (error)
@@ -368,7 +376,7 @@ class Bitmusa {
                     }
 
                     let json = typeof body === 'object' ? body : JSON.parse(body);
-                    var ticker = json.find((item) => item.symbol == symbol);
+                    var ticker = json.find((item) => item.symbol == pair);
                     if (ticker === undefined || ticker === null) {
                         reject("ticker not found");
                     } else {
