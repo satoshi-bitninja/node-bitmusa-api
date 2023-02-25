@@ -425,7 +425,7 @@ class Bitmusa {
         const pair = `${targetSymbol}/${baseSymbol}`;
         
         return new Promise((resolve, reject) => {
-            request(this.buildRequestOptions("/exchange/order/personal/current", 'GET', { symbol: `${targetSymbol}/${baseSymbol}`, size: size }), (error, response, body) => {
+            request(this.buildRequestOptions("/market/latest-trade", 'GET', { symbol: `${targetSymbol}/${baseSymbol}`, size: size }), (error, response, body) => {
                 if (error)
                     reject(error);
                 else {
