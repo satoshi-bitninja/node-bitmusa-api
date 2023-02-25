@@ -341,7 +341,12 @@ class Bitmusa {
                     }
 
                     let json = typeof body === 'object' ? body : JSON.parse(body);
-                    var ticker = json.find((item) => item.symbol == pair);
+                    var ticker = json;
+                    if (targetSymbol!="")
+                    {
+                        ticker = json.find((item) => item.symbol == pair);
+                    }
+                    
                     if (ticker === undefined || ticker === null) {
                         reject("ticker not found");
                     } else {
