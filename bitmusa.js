@@ -439,7 +439,32 @@ class Bitmusa {
         const pair = `${targetSymbol}/${baseSymbol}`;
         
         return new Promise((resolve, reject) => {
-            request(this.buildRequestOptions("/market/latest-trade", 'GET', { symbol: `${targetSymbol}/${baseSymbol}`, size: size }), (error, response, body) => {
+            request(this.buildRequestOptions("/market/latest-trade", 'GET', { symbol: `${pair}`, size: size }), (error, response, body) => {
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
+                    }
+
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
+                    if (error) {
+                         reject(json);
+                    } else {
+                         resolve(json);
+                    }
+                }
+            });
+        });
+    }
+
+    fLatestTrade(targetSymbol = "", baseSymbol="TUSDT", size = 50){
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}${baseSymbol}`;
+        
+        return new Promise((resolve, reject) => {
+            request(this.buildRequestOptions("/future-market-trade/", 'GET', { ticker: `${pair}`, size: size }), (error, response, body) => {
                 if (error)
                     reject(error);
                 else {

@@ -1,8 +1,8 @@
 {
   "name": "node-bitmusa-api",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "description": "bitmusa api wrapper",
-  "author": "satoshi@bitninja.dev",
+  "author": "satoshi@bitninja.dev, katana@bitninja.dev",
   "dependencies": {
     "install": "^0.13.0",
     "querystring": "^0.2.1",
