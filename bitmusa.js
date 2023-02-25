@@ -419,6 +419,15 @@ class Bitmusa {
         });
     }
 
+    /**
+     * Retrieves the latestTrade from the Bitmusa API.
+     * @param {string} targetSymbol - The target symbol to retrieve.
+     * @param {string} baseSymbol - The base symbol to retrieve.
+     * @returns {Promise} A Promise that resolves with the response body if the latestTrade is retrieved successfully, or rejects with an error message otherwise.
+     * @throws {Error} If the latestTrade is not found.
+     * @throws {Error} If the response status code is not 200.
+     * @throws {Error} If the response code is not 0.
+     */
     latestTrade(targetSymbol = "", baseSymbol="USDT", size = 1){
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
