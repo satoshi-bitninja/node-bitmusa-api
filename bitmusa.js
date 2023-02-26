@@ -787,7 +787,11 @@ class Bitmusa {
     fCloseAll(targetSymbol = "", baseSymbol="TUSDT"){
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
-        const pair = `${targetSymbol}${baseSymbol}`;
+        var pair = `${targetSymbol}${baseSymbol}`;
+        if (targetSymbol == "ALL")
+        {
+            pair = "ALL";
+        }
 
         return new Promise((resolve, reject) => {
             request(this.buildRequestOptions("/future-position/close_all", 'PUT', { ticker: `${pair}` }), (error, response, body) => {
@@ -819,6 +823,43 @@ class Bitmusa {
     fCancel(order_id) {
         return new Promise((resolve, reject) => {
             request(this.buildRequestOptions(`/future-order/cancel/${order_id}`, 'PUT', {}), (error, response, body) => {
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
+                    }
+
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
+                    if (error) {
+                        reject(json);
+                    } else {
+                        resolve(json);
+                    }
+                }
+            });
+        });
+    }
+
+    /**
+     * All Open Order Cancel from the Bitmusa Future API.
+     * @param {string} targetSymbol - The target symbol to retrieve.
+     * @param {string} baseSymbol - The base symbol to retrieve.
+     * @returns {Promise} A Promise that resolves with the response body if the Open Order Cancel is retrieved successfully, or rejects with an error message otherwise.
+     * @throws {Error} If the Open Order Cancel is not found.
+     * @throws {Error} If the response status code is not 200.
+     */
+    fCancelAll(targetSymbol = "", baseSymbol="TUSDT"){
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        var pair = `${targetSymbol}${baseSymbol}`;
+        if (targetSymbol == "ALL")
+        {
+            pair = "ALL";
+        }
+
+        return new Promise((resolve, reject) => {
+            request(this.buildRequestOptions("/future-order/cancel_all", 'PUT', { ticker: `${pair}` }), (error, response, body) => {
                 if (error)
                     reject(error);
                 else {
