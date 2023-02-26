@@ -266,6 +266,61 @@ class Bitmusa {
     } // end of sell
 
     /**
+     * Places a order for the specified currency pair, amount, and price.
+     * @param {string} direction - The direction of the order (BUY or SELL).
+     * @param {string} pair - The currency pair to buy.
+     * @param {number} amount - The amount of the currency to buy.
+     * @param {string|null} [type=null] - The order type (MARKET_PRICE or LIMIT_PRICE).
+     * @param {number|null} [price=null] - The price at which to buy the currency (required for LIMIT_PRICE orders).
+     * @returns {Promise} A Promise that resolves with the response body if the order is placed successfully, or rejects with an error message otherwise.
+     * @throws {Error} If the order type is LIMIT_PRICE and the price parameter is null.
+     * @throws {Error} If the direction is not BUY or SELL.
+     */
+    order(direction = "buy", pair, amount, type = null, price = null) {        
+        direction = direction.toUpperCase();
+        if (direction !== 'BUY' && direction !== 'SELL') {
+            throw new Error('[order] direction is not BUY or SELL');
+        }
+        var options = { 
+            symbol : pair, 
+            amount : amount+"",
+            direction : direction
+        };
+
+        if ((type === null) || (type === 'MARKET_PRICE')) {
+            options = Object.assign(options, { type: 'MARKET_PRICE', price: "0" });
+        }
+
+        if (type === 'LIMIT_PRICE') {
+            // if price is null throw error
+            if (price === null) {
+                throw new Error('[sell] price is null');
+            }
+
+            options = Object.assign(options, { type: 'LIMIT_PRICE', price: price+"" });
+        }
+
+        return new Promise((resolve, reject) => {
+            request(this.buildRequestOptions("/exchange/order/add", 'GET', options), (error, response, body) => {
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
+                    }
+
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
+                    if (json.code !== 0) {
+                         reject(json);
+                    } else {
+                         resolve(json);
+                    }
+                }
+            });
+        });
+    } // end of order
+
+    /**
      * Cancels the order with the specified order ID.
      * @param {string} orderId - The ID of the order to cancel.
      * @returns {Promise} A Promise that resolves with the response body if the order is cancelled successfully, or rejects with an error message otherwise.
