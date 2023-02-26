@@ -345,7 +345,54 @@ class Bitmusa {
                 }
             });
         });
-    } // end of cancelOrder
+    } // end of cancel
+
+    /**
+     * Cancels all orders for the specified currency pair, direction, and type.
+     * @param {string} targetSymbol - The target currency symbol.
+     * @param {string} baseSymbol - The base currency symbol.
+     * @param {string} direction - The direction of the orders to cancel (BUY or SELL).
+     * @returns {Promise} A Promise that resolves with the response body if the orders are cancelled successfully, or rejects with an error message otherwise.
+     * @throws {Error} If the direction is not BUY or SELL.
+     */
+    cancelAll(targetSymbol = "", baseSymbol = "USDT", direction = "buy") {
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        direction = direction.toUpperCase();
+        const pair = `${targetSymbol}/${baseSymbol}`;
+        if (direction=="BUY") direction = 0;
+        else if (direction=="SELL") direction = 1;
+
+        if (direction !== 'BUY' && direction !== 'SELL') {
+            throw new Error('[cancelAll] direction is not BUY or SELL');
+        }
+        
+        var options = {
+            symbol : pair,
+            direction : direction,
+            type : 1 // 0: Market Price, 1: Limit Price ??
+        };
+
+        return new Promise((resolve, reject) => {
+            request(this.buildRequestOptions("/exchange/order/cancel/all", 'POST', options), (error, response, body) => {
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
+                    } else {
+                        let json = typeof body === 'object' ? body : JSON.parse(body);
+                        if (json.code !== 0) {
+                            reject(json);
+                        } else {
+                            resolve(json);
+                        }
+                    }
+                }
+            });
+        });
+    } // end of cancelAll
+
 
     /**
      * Retrieves the user's open orders from the Bitmusa API.
