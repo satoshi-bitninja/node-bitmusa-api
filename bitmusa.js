@@ -7,7 +7,7 @@ class Bitmusa {
      * @param {string|Object} [options={}] - The API options. If string, the authentication key. If object, the options object.
      * @param {string} [options.authKey] - The authentication key.
      * @param {string} [options.baseURL=https://www.bitmusa.com/api] - The API base URL.
-     * @param {number} [options.timeOut=1000] - The API request timeout in milliseconds.
+     * @param {number} [options.timeout=1000] - The API request timeout in milliseconds.
      * @throws {Error} Invalid options.
      */
     constructor(options = {}) {
@@ -34,7 +34,7 @@ class Bitmusa {
     getDefaultOptions() {
         return {
             baseURL: 'https://www.bitmusa.com/api',
-            timeOut: 1000
+            timeout: 1000
         }
     }
 
@@ -56,6 +56,14 @@ class Bitmusa {
     }
 
     /**
+     * Returns the API base URL.
+     * @returns {string} The API base URL.
+     */
+     getBaseURL() {
+        return this.options.baseURL;
+    }
+
+    /**
      * Sets the authentication key.
      * @param {string} authKey - The authentication key.
      */
@@ -64,19 +72,27 @@ class Bitmusa {
     }
 
     /**
-     * Returns the API base URL.
-     * @returns {string} The API base URL.
-     */
-    getBaseURL() {
-        return this.options.baseURL;
-    }
-
-    /**
      * Returns the authentication key.
      * @returns {string} The authentication key.
      */
-    getAuthKey() {
+     getAuthKey() {
         return this.options.authKey;
+    }
+
+    /**
+     * Sets the API request timeout in milliseconds.
+     * @param {number} timeout - The API request timeout in milliseconds.
+     */
+     setTimeout(timeout) {
+        this.options.timeout = timeout;
+    }
+
+    /**
+     * Returns the API request timeout in milliseconds.
+     * @returns {number} The API request timeout in milliseconds.
+     */
+    getTimeout() {
+        return this.options.timeout;
     }
 
     /**
@@ -91,7 +107,7 @@ class Bitmusa {
             url: `${this.options.baseURL}${path}`,
             json: true,
             method: method.toUpperCase(),
-            timeout: this.options.timeOut,
+            timeout: this.options.timeout,
             cache: false,
             headers: {
               'x-auth-token': this.options.authKey,
@@ -101,7 +117,7 @@ class Bitmusa {
         
         if (method.toUpperCase() === 'GET' && parameter) {
             requestOptions.url += `?${querystring.stringify(parameter)}`;
-        } else if (parameter) {
+        } else if (parameter) { // when method is POST, PUT, DELETE, etc.
             requestOptions.body = parameter;
         }
     
