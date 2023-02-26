@@ -809,6 +809,33 @@ class Bitmusa {
         });
     }
 
+    /**
+     * Open Order Cancel from the Bitmusa Future API.
+     * @param {string} order_id - The order id to retrieve.
+     * @returns {Promise} A Promise that resolves with the response body if the Open Order Cancel is retrieved successfully, or rejects with an error message otherwise.
+     * @throws {Error} If the Open Order Cancel is not found.
+     * @throws {Error} If the response status code is not 200.
+     */
+    fCancel(order_id) {
+        return new Promise((resolve, reject) => {
+            request(this.buildRequestOptions(`/future-order/cancel/${order_id}`, 'PUT', {}), (error, response, body) => {
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
+                    }
+
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
+                    if (error) {
+                        reject(json);
+                    } else {
+                        resolve(json);
+                    }
+                }
+            });
+        });
+    }
     
 }
 
