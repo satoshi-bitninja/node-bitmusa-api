@@ -682,10 +682,71 @@ class Bitmusa {
 
         position = position.toUpperCase();
         if (position != "BUY" && position != "SELL") throw new Error("Position must be BUY or SELL");
-        if (position == "BUY") position = 0;
-        if (position == "SELL") position = 1;
+        if (position == "BUY") position = 0; // long
+        if (position == "SELL") position = 1; // short
 
         var options = {
+            direction : 0, // 0: Open, 1: Close
+            ticker : `${pair}`,
+            margin_mode : margin_mode,
+            position : position,
+            order_type : order_type,
+            leverage : leverage,
+            order_price : order_price,
+            order_qty : order_qty
+        };
+
+        return new Promise((resolve, reject) => {
+            request(this.buildRequestOptions("/future-order/", 'POST', options), (error, response, body) => {
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
+                    }
+
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
+                    if (error) {
+                        reject(json);
+                    } else {
+                        resolve(json);
+                    }
+                }
+            });
+        });
+    }
+
+
+    /**
+     * Position Close from the Bitmusa Future API.
+     * @param {string} targetSymbol - The target symbol to retrieve.
+     * @param {string} baseSymbol - The base symbol to retrieve.
+     * @param {string} margin_mode - The margin mode to retrieve.
+     * @param {string} position - The position to retrieve.
+     * @param {string} order_type - The order type to retrieve.
+     * @param {string} leverage - The leverage to retrieve.
+     * @param {string} order_price - The order price to retrieve.
+     * @param {string} order_qty - The order qty to retrieve.
+     * @returns {Promise} A Promise that resolves with the response body if the Position Close is retrieved successfully, or rejects with an error message otherwise.
+     * @throws {Error} If the Position Close is not found.
+     * @throws {Error} If the response status code is not 200.
+     * @throws {Error} If the Position is not BUY or SELL.
+     * @throws {Error} If the Order Type is not 1 or 2.
+     * @throws {Error} If the Order Qty is not 0 or 1.
+     * @throws {Error} If the Order Price is not 0 or 1.
+     */
+    fClose(targetSymbol = "", baseSymbol="TUSDT", margin_mode=0, position="buy", order_type=1, leverage=10, order_price=1, order_qty=0){
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}${baseSymbol}`;
+
+        position = position.toUpperCase();
+        if (position != "BUY" && position != "SELL") throw new Error("Position must be BUY or SELL");
+        if (position == "BUY") position = 0; // long
+        if (position == "SELL") position = 1; // short
+
+        var options = {
+            direction : 1, // 0: Open, 1: Close
             ticker : `${pair}`,
             margin_mode : margin_mode,
             position : position,
@@ -747,6 +808,8 @@ class Bitmusa {
             });
         });
     }
+
+    
 }
 
 // export the class
