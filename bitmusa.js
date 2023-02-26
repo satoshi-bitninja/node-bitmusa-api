@@ -34,14 +34,6 @@ class Bitmusa {
         }
     }
 
-    /**
-     * Creates a new instance of Bitmusa with the specified authentication key.
-     * @param {string} authKey - The authentication key.
-     * @returns {Bitmusa} The new Bitmusa instance.
-     */
-    createWithKey(authKey) {
-        return new Bitmusa({ authKey : authKey });
-    }
 
     /**
      * Sets the API base URL.
