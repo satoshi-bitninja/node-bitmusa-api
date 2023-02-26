@@ -12,19 +12,17 @@ class Bitmusa {
      */
     constructor(options = {}) {
         if (typeof options === 'string') {
-            this.options = Object.assign(this.getDefaultOptions(), { authKey: options });
-        } else {
-            if (typeof options === 'object') {
-                if (Object.keys(options).length === 0) {
-                    this.options = this.getDefaultOptions();
-                } else {
-                    this.options = Object.assign(this.getDefaultOptions(), options);
-                }
-            } else {
-                throw new Error('[constructor] Invalid options');
-            }
+            options = { authKey: options };
         }
-
+    
+        if (typeof options !== 'object' || options === null) {
+            throw new Error('[constructor] Invalid options');
+        }
+    
+        this.options = {
+            ...this.getDefaultOptions(),
+            ...options
+        };
     }
 
     /**
