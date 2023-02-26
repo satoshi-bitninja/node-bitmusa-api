@@ -87,30 +87,27 @@ class Bitmusa {
      * @returns {Object} The request options object.
      */
     buildRequestOptions(path, method, parameter = null) {
-
-        let options = {
-            url: this.options.baseURL + path,
+        const requestOptions = {
+            url: `${this.options.baseURL}${path}`,
             json: true,
             method: method.toUpperCase(),
             timeout: this.options.timeOut,
             cache: false,
             headers: {
-                'x-auth-token': this.options.authKey,
-                'Content-Type': 'application/json'
+              'x-auth-token': this.options.authKey,
+              'Content-Type': 'application/json'
             }
         };
-
-        if ((method.toUpperCase() === 'GET') && (parameter)) {
-            options.url += '?' + querystring.stringify(parameter);
+        
+        if (method.toUpperCase() === 'GET' && parameter) {
+            requestOptions.url += `?${querystring.stringify(parameter)}`;
+        } else if (parameter) {
+            requestOptions.body = parameter;
         }
-
-        if (parameter) {
-            options = Object.assign(options, { body: parameter });
-        }
-
-        console.log(options);
-
-        return options;
+    
+        //console.log(requestOptions);
+    
+        return requestOptions;
     }
 
     /**
