@@ -514,6 +514,39 @@ class Bitmusa {
         });
     }
 
+    /**
+     * Retrieves the orderbook from the Bitmusa API.
+     * @param {string} targetSymbol - The target symbol to retrieve.
+     * @param {string} baseSymbol - The base symbol to retrieve.
+     * @returns {Promise} A Promise that resolves with the response body if the orderbook is retrieved successfully, or rejects with an error message otherwise.
+     * @throws {Error} If the orderbook is not found.
+     * @throws {Error} If the response status code is not 200.
+     */
+    orderbook(targetSymbol = "", baseSymbol="USDT"){
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}/${baseSymbol}`;
+
+        return new Promise((resolve, reject) => {
+            request(this.buildRequestOptions("/market/exchange-plate-mini", 'GET', { symbol: `${pair}` }), (error, response, body) => {
+                if (error)
+                    reject(error);
+                else {
+                    if (response.statusCode !== 200) {
+                        reject("statusCode : " + response.statusCode);
+                    }
+
+                    let json = typeof body === 'object' ? body : JSON.parse(body);
+                    if (error) {
+                        reject(json);
+                    } else {
+                        resolve(json);
+                    }
+                }
+            });
+        });
+    }
+
     fLatestTrade(targetSymbol = "", baseSymbol="TUSDT", size = 50){
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
