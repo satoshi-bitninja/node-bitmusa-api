@@ -160,6 +160,7 @@ class Bitmusa {
 
     async getOpenedOrders(pageNo = 1, pageSize = 10) {
         const funcName = '[getOpenedOrders]:';
+        if (pageNo < 1) throw new Error(`${funcName} pageNo start from 1`);
 
         var parameters = {
             pageNo : pageNo, // 1 is start, not 0
@@ -171,10 +172,11 @@ class Bitmusa {
             const response = await this.requestAPI('/exchange/order/personal/current', 'get', parameters);
             if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
             const json = response.data;
-            console.log(json);
-            if (json.code !== 0) {
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
                 throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
-            }
+            } 
 
             return json;
         } catch (error) {
@@ -182,22 +184,50 @@ class Bitmusa {
         }
     }
 
-    async getOrderedOrders(pageNo = 1, pageSize = 10, pair = "") {
-        const funcName = '[getOpenedOrders]:';
+    async getOrderedOrders(pageNo = 1, pageSize = 10, symbol = null) {
+        const funcName = '[getOrderedOrders]:';
+        if (pageNo < 1) throw new Error(`${funcName} pageNo start from 1`);
 
         var parameters = {
             pageNo : pageNo, // 1 is start, not 0
             pageSize : pageSize,
         }
-        if (pair) parameters = 
+        if (symbol) parameters = Object.assign(parameters, { symbol: symbol });
         try {
-            const response = await this.requestAPI('/exchange/order/personal/current', 'get', parameters);
+            const response = await this.requestAPI('/exchange/order/personal/history', 'get', parameters);
             if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
             const json = response.data;
-            console.log(json);
-            if (json.code !== 0) {
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
                 throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
-            }
+            } 
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+
+
+    async getTradedOrders(pageNo = 1, pageSize = 10, symbol = null) {
+        const funcName = '[getTradedOrders]:';
+        if (pageNo < 1) throw new Error(`${funcName} pageNo start from 1`);
+
+        var parameters = {
+            pageNo : pageNo, // 1 is start, not 0
+            pageSize : pageSize,
+        }
+        if (symbol) parameters = Object.assign(parameters, { symbol: symbol });
+        try {
+            const response = await this.requestAPI('/exchange/trade/personal/history', 'get', parameters);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            } 
 
             return json;
         } catch (error) {
