@@ -1,5 +1,4 @@
 const axios = require('axios');
-const querystring = require('querystring');
 
 class Bitmusa {
     constructor(options = {}) {
@@ -21,7 +20,6 @@ class Bitmusa {
             timeout: 3000
         }
     }
-
 
     setBaseURL(baseURL) {
         this.options.baseURL = baseURL;
