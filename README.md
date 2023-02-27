@@ -101,13 +101,11 @@ bitmusa.openOrders(1, 10).then(result => {
 
 ### Spot
 - createOrder(): Creates an order.
-- createSellOrder(): Creates an sell order.
-- createBuyOrder(): Creates an buy order.
-- cancelOrder(): Cancels an order.
-- getOrder(): Gets details of a specific order.
-- getOpenOrderList(): Gets a list of open orders.
-- getOrderList() : Gets the list of orders in a specific market.
-- getTradeList() : Retrieves the list of trades in a specific market.
+- cancelOrder(): Cancels an order. 
+- getOrder(): Gets details of a specific order. [not supported]
+- getOpenedOrders(): Gets a list of open orders.
+- getOrderedOrders() : Gets the list of orders in a specific market.
+- getTradedOrders() : Retrieves the list of trades in a specific market.
 - getOrderBook() : Retrieves order book information for a specific market.
 - getTicker() : Gets the current ticker information for a specific market.
 - getRecentTrades(): Retrieves the recent trades of a specific market.
@@ -145,7 +143,7 @@ bitmusa.openOrders(1, 10).then(result => {
 # Example
 
 ## 1. signIn
-### [!caution] this is private api. so you must grant permission to use this api. send email to support@bitmusa.com
+### **[Note]** this is private api. so you must grant permission to use this api. send email to support@bitmusa.com
 ```js
 bitmusa.signIn("[id]","[password]").then(result => {
     console.log(result);

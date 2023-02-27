@@ -1,9 +1,14 @@
 const axios = require('axios');
+const request = require('request');
+const querystring = require('querystring');
 
 class Bitmusa {
     constructor(options = {}) {
         if (typeof options === 'string') {
-            this.options = { authKey: options };
+            this.options = {
+                ...this.getDefaultOptions(),
+                ...{ authKey: options }
+            };
         } else if (typeof options == 'object') {
             this.options = {
                 ...this.getDefaultOptions(),
@@ -17,7 +22,7 @@ class Bitmusa {
     getDefaultOptions() {
         return {
             baseURL: 'https://www.bitmusa.com/api',
-            timeout: 3000
+            timeout: 1000
         }
     }
 
@@ -45,22 +50,20 @@ class Bitmusa {
         return this.options.timeout;
     }
 
-
-
-    async requestAPI(path, method, data = null) {
+    async requestAPI(path, method, parameters = null) {
         method = method.toUpperCase();
-        const options = {
+        var options = {
             method: method,
             url: `${this.options.baseURL}${path}`,
             headers: {
                 'x-auth-token': this.options.authKey,
                 'Content-Type': 'application/json'
             },
-            data: data,
+            data: parameters,
             responseType: 'json',
             timeout: this.options.timeout
         };
-
+        if (method === 'GET') options = Object.assign(options, { params: parameters });
         try {
             const response = await axios.request(options);
             return response;
@@ -78,10 +81,14 @@ class Bitmusa {
         if (!password) throw new Error(`${funcName} password is blank`);
 
         try {
-            const response = await this.requestAPI('/users/v1/signin', 'post', { email: email, password: password });
+            const parameters = {
+                email: email,
+                password: password
+            }
+            const response = await this.requestAPI('/users/v1/signin', 'post', parameters);
             if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
             const json = response.data;
-            console.log(json);
+            //console.log(json);
             if (json.code !== 0) {
                 throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
             }
@@ -91,6 +98,114 @@ class Bitmusa {
             throw new Error(`${error.message}`);
         }
     }
+
+    async createOrder(direction, targetSymbol, baseSymbol = 'USDT', amount, type = "MARKET", price = null) {
+        const funcName = '[createOrder]:';
+
+        if (!direction) throw new Error(`${funcName} direction is blank`);
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
+        if (!amount) throw new Error(`${funcName} amount is blank`);
+
+        direction = direction.toUpperCase();
+        const pair = `${targetSymbol}/${baseSymbol}`;
+
+        var parameters = {
+            symbol: pair,
+            amount: `${amount}`,
+            direction: direction,
+            type: type,
+            price: `${price}`,
+        };
+        if (type.toUpperCase().indexOf('LIMIT') >= 0) {
+            parameters = Object.assign(parameters, { type: 'LIMIT_PRICE'});
+        } else {
+            parameters = Object.assign(parameters, { type: 'MARKET_PRICE', price: "0" });
+        }
+        console.log(parameters);
+        try {
+            const response = await this.requestAPI('/exchange/order/add', 'get', parameters);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            console.log(json);
+            if (json.code !== 0) {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+
+
+    async cancelOrder(orderId) {
+        const funcName = '[cancelOrder]:';
+
+        if (!orderId) throw new Error(`${funcName} orderId is blank`);
+
+        try {
+            const response = await this.requestAPI(`/exchange/order/cancel/${orderId}`, 'post');
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            console.log(json);
+            if (json.code !== 0) {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+
+    async getOpenedOrders(pageNo = 1, pageSize = 10) {
+        const funcName = '[getOpenedOrders]:';
+
+        var parameters = {
+            pageNo : pageNo, // 1 is start, not 0
+            pageSize : pageSize,
+            //symbol : "BTC/USDT" // not supported
+
+        }
+        try {
+            const response = await this.requestAPI('/exchange/order/personal/current', 'get', parameters);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            console.log(json);
+            if (json.code !== 0) {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+
+    async getOrderedOrders(pageNo = 1, pageSize = 10, pair = "") {
+        const funcName = '[getOpenedOrders]:';
+
+        var parameters = {
+            pageNo : pageNo, // 1 is start, not 0
+            pageSize : pageSize,
+        }
+        if (pair) parameters = 
+        try {
+            const response = await this.requestAPI('/exchange/order/personal/current', 'get', parameters);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            console.log(json);
+            if (json.code !== 0) {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+    
+
 
 
     async balance() {
@@ -650,6 +765,33 @@ class Bitmusa {
                 }
             });
         });
+    }
+
+    buildRequestOptions(path, method, parameter = null) {
+
+        let options = {
+            url: this.options.baseURL + path,
+            json: true,
+            method: method.toUpperCase(),
+            timeout: this.options.timeOut,
+            cache: false,
+            headers: {
+                'x-auth-token': this.options.authKey,
+                'Content-Type': 'application/json'
+            }
+        };
+
+        if ((method.toUpperCase() === 'GET') && (parameter)) {
+            options.url += '?' + querystring.stringify(parameter);
+        }
+
+        if (parameter) {
+            options = Object.assign(options, { body: parameter });
+        }
+
+        console.log(options);
+
+        return options;
     }
 
 }
