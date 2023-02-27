@@ -2,14 +2,6 @@ const request = require('request');
 const querystring = require('querystring');
 
 class Bitmusa {
-    /**
-     * Creates an instance of Bitmusa.
-     * @param {string|Object} [options={}] - The API options. If string, the authentication key. If object, the options object.
-     * @param {string} [options.authKey] - The authentication key.
-     * @param {string} [options.baseURL=https://www.bitmusa.com/api] - The API base URL.
-     * @param {number} [options.timeout=1000] - The API request timeout in milliseconds.
-     * @throws {Error} Invalid options.
-     */
     constructor(options = {}) {
         if (typeof options === 'string') {
             this.options = { authKey: options };
@@ -23,10 +15,6 @@ class Bitmusa {
         }            
     }
 
-    /**
-     * Returns the default options for the Bitmusa API.
-     * @returns {Object} The default options object.
-     */
     getDefaultOptions() {
         return {
             baseURL: 'https://www.bitmusa.com/api',
@@ -35,61 +23,30 @@ class Bitmusa {
     }
 
 
-    /**
-     * Sets the API base URL.
-     * @param {string} baseURL - The API base URL.
-     */
     setBaseURL(baseURL) {
         this.options.baseURL = baseURL;
     }
 
-    /**
-     * Returns the API base URL.
-     * @returns {string} The API base URL.
-     */
-     getBaseURL() {
+    getBaseURL() {
         return this.options.baseURL;
     }
 
-    /**
-     * Sets the authentication key.
-     * @param {string} authKey - The authentication key.
-     */
     setAuthKey(authKey) {
         this.options.authKey = authKey;
     }
 
-    /**
-     * Returns the authentication key.
-     * @returns {string} The authentication key.
-     */
-     getAuthKey() {
+    getAuthKey() {
         return this.options.authKey;
     }
 
-    /**
-     * Sets the API request timeout in milliseconds.
-     * @param {number} timeout - The API request timeout in milliseconds.
-     */
-     setTimeout(timeout) {
+    setTimeout(timeout) {
         this.options.timeout = timeout;
     }
 
-    /**
-     * Returns the API request timeout in milliseconds.
-     * @returns {number} The API request timeout in milliseconds.
-     */
     getTimeout() {
         return this.options.timeout;
     }
 
-    /**
-     * Builds the request options object for the specified API endpoint and method.
-     * @param {string} path - The API endpoint path.
-     * @param {string} method - The HTTP method (GET, POST, etc.).
-     * @param {Object|null} [parameter=null] - The request parameter object.
-     * @returns {Object} The request options object.
-     */
     buildRequestOptions(path, method, parameter = null) {
         const requestOptions = {
             url: `${this.options.baseURL}${path}`,
@@ -114,12 +71,6 @@ class Bitmusa {
         return requestOptions;
     }
 
-    /**
-     * Sends a sign-in request to the Bitmusa API with the specified email and password.
-     * @param {string} email - The user's email.
-     * @param {string} password - The user's password.
-     * @returns {Promise} A Promise that resolves with the response body if the sign-in is successful, or rejects with an error message otherwise.
-     */
     signIn(email, password) {
         return new Promise((resolve, reject) => {
             request(this.buildRequestOptions("/users/v1/signin", 'POST', { email: email, password: password }), (error, response, body) => {
@@ -140,12 +91,8 @@ class Bitmusa {
                 }
             });
         });
-    } // end of signIn
+    } 
 
-    /**
-     * Retrieves the user's asset balance from the Bitmusa API.
-     * @returns {Promise} A Promise that resolves with the response body if the balance is retrieved successfully, or rejects with an error message otherwise.
-     */
     balance() {
         return new Promise((resolve, reject) => {
             request(this.buildRequestOptions("/users/asset/wallet", 'GET'), (error, response, body) => {
@@ -166,17 +113,8 @@ class Bitmusa {
                 }
             });
         });
-    } // end of balance
+    } 
 
-    /**
-     * Places a buy order for the specified currency pair, amount, and price.
-     * @param {string} pair - The currency pair to buy.
-     * @param {number} amount - The amount of the currency to buy.
-     * @param {string|null} [type=null] - The order type (MARKET_PRICE or LIMIT_PRICE).
-     * @param {number|null} [price=null] - The price at which to buy the currency (required for LIMIT_PRICE orders).
-     * @returns {Promise} A Promise that resolves with the response body if the order is placed successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the order type is LIMIT_PRICE and the price parameter is null.
-     */
     buy(pair, amount, type = null, price = null) {
         var options = { 
             symbol : pair, 
@@ -215,17 +153,8 @@ class Bitmusa {
                 }
             });
         });
-    } // end of buy
+    } 
 
-    /**
-     * Places a sell order for the specified currency pair, amount, and price.
-     * @param {string} pair - The currency pair to sell.
-     * @param {number} amount - The amount of the currency to sell.
-     * @param {string|null} [type=null] - The order type (MARKET_PRICE or LIMIT_PRICE).
-     * @param {number|null} [price=null] - The price at which to sell the currency (required for LIMIT_PRICE orders).
-     * @returns {Promise} A Promise that resolves with the response body if the order is placed successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the order type is LIMIT_PRICE and the price parameter is null.
-     */
     sell(pair, amount, type = null, price = null) {
         var options = { 
             symbol : pair, 
@@ -266,17 +195,6 @@ class Bitmusa {
         });
     } // end of sell
 
-    /**
-     * Places a order for the specified currency pair, amount, and price.
-     * @param {string} direction - The direction of the order (BUY or SELL).
-     * @param {string} pair - The currency pair to buy.
-     * @param {number} amount - The amount of the currency to buy.
-     * @param {string|null} [type=null] - The order type (MARKET_PRICE or LIMIT_PRICE).
-     * @param {number|null} [price=null] - The price at which to buy the currency (required for LIMIT_PRICE orders).
-     * @returns {Promise} A Promise that resolves with the response body if the order is placed successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the order type is LIMIT_PRICE and the price parameter is null.
-     * @throws {Error} If the direction is not BUY or SELL.
-     */
     order(direction = "buy", pair, amount, type = null, price = null) {        
         direction = direction.toUpperCase();
         if (direction !== 'BUY' && direction !== 'SELL') {
@@ -319,13 +237,8 @@ class Bitmusa {
                 }
             });
         });
-    } // end of order
+    } 
 
-    /**
-     * Cancels the order with the specified order ID.
-     * @param {string} orderId - The ID of the order to cancel.
-     * @returns {Promise} A Promise that resolves with the response body if the order is cancelled successfully, or rejects with an error message otherwise.
-     */
     cancel(orderId) {
         return new Promise((resolve, reject) => {
             request(this.buildRequestOptions("/exchange/order/cancel/"+orderId, 'GET'), (error, response, body) => {
@@ -345,16 +258,8 @@ class Bitmusa {
                 }
             });
         });
-    } // end of cancel
+    } 
 
-    /**
-     * Cancels all orders for the specified currency pair, direction, and type.
-     * @param {string} targetSymbol - The target currency symbol.
-     * @param {string} baseSymbol - The base currency symbol.
-     * @param {string} direction - The direction of the orders to cancel (BUY or SELL).
-     * @returns {Promise} A Promise that resolves with the response body if the orders are cancelled successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the direction is not BUY or SELL.
-     */
     cancelAll(targetSymbol = "", baseSymbol = "USDT", direction = "buy") {
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
@@ -391,15 +296,9 @@ class Bitmusa {
                 }
             });
         });
-    } // end of cancelAll
+    } 
 
 
-    /**
-     * Retrieves the user's open orders from the Bitmusa API.
-     * @param {number} [page=1] - The page number to retrieve (default is 1).
-     * @param {number} [size=10] - The page size to retrieve (default is 10).
-     * @returns {Promise} A Promise that resolves with the response body if the orders are retrieved successfully, or rejects with an error message otherwise.
-     */
     openOrders(page = 1, size = 10) {
         return new Promise((resolve, reject) => {
             request(this.buildRequestOptions("/exchange/order/personal/current", 'GET', { pageNo: page, pageSize: size }), (error, response, body) => {
@@ -419,16 +318,8 @@ class Bitmusa {
                 }
             });
         });
-    } // end of openOrders
+    }
 
-    /**
-     * Retrieves the Ticker from the Bitmusa API.
-     * @param {string} targetSymbol - The target symbol to retrieve.
-     * @param {string} baseSymbol - The base symbol to retrieve.
-     * @returns {Promise} A Promise that resolves with the response body if the ticker is retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the ticker is not found.
-     */
-    
     ticker(targetSymbol="", baseSymbol="USDT") {
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
@@ -461,14 +352,6 @@ class Bitmusa {
 
     }
 
-    /**
-     * Retrieves the Price from the Bitmusa API.
-     * 
-     * @param {string} targetSymbol - The target symbol to retrieve (ex> "BTC", default is empty).
-     * @param {string} baseSymbol - The base symbol to retrieve (ex> "USDT", default is empty).
-     * @returns {Promise} A Promise that resolves with the response body if the orders are retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the symbol is empty.
-     */
     price(targetSymbol="", baseSymbol="USDT") {
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
@@ -496,16 +379,6 @@ class Bitmusa {
 
     }
 
-    /**
-     * Retrieves the user's wallet from the Bitmusa API.
-     * @returns {Promise} A Promise that resolves with the response body if the wallet is retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the wallet is not found.
-     * @throws {Error} If the response status code is not 200.
-     * @throws {Error} If the response code is not 0.
-     * @throws {Error} If the response message is not "success".
-     * @throws {Error} If the response data is not found.
-     * @throws {Error} If the response data is not an array.
-     */
     wallet(){
         return new Promise((resolve, reject) => {
             request(this.buildRequestOptions("/users/asset/wallet", 'GET'), (error, response, body) => {
@@ -527,15 +400,6 @@ class Bitmusa {
         });
     }
 
-    /**
-     * Retrieves the latestTrade from the Bitmusa API.
-     * @param {string} targetSymbol - The target symbol to retrieve.
-     * @param {string} baseSymbol - The base symbol to retrieve.
-     * @returns {Promise} A Promise that resolves with the response body if the latestTrade is retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the latestTrade is not found.
-     * @throws {Error} If the response status code is not 200.
-     * @throws {Error} If the response code is not 0.
-     */
     latestTrade(targetSymbol = "", baseSymbol="USDT", size = 1){
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
@@ -561,14 +425,6 @@ class Bitmusa {
         });
     }
 
-    /**
-     * Retrieves the orderbook from the Bitmusa API.
-     * @param {string} targetSymbol - The target symbol to retrieve.
-     * @param {string} baseSymbol - The base symbol to retrieve.
-     * @returns {Promise} A Promise that resolves with the response body if the orderbook is retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the orderbook is not found.
-     * @throws {Error} If the response status code is not 200.
-     */
     orderbook(targetSymbol = "", baseSymbol="USDT"){
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
@@ -594,14 +450,6 @@ class Bitmusa {
         });
     }
 
-    /**
-     * Retrieves the Lastest trade from the Bitmusa Future API.
-     * @param {string} targetSymbol - The target symbol to retrieve.
-     * @param {string} baseSymbol - The base symbol to retrieve.
-     * @returns {Promise} A Promise that resolves with the response body if the Lastest trade is retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the Lastest trade is not found.
-     * @throws {Error} If the response status code is not 200.
-     */
     fLatestTrade(targetSymbol = "", baseSymbol="TUSDT", size = 50){
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
@@ -627,14 +475,6 @@ class Bitmusa {
         });
     }
 
-    /**
-     * Retrieves the Orderbook from the Bitmusa Future API.
-     * @param {string} targetSymbol - The target symbol to retrieve.
-     * @param {string} baseSymbol - The base symbol to retrieve.
-     * @returns {Promise} A Promise that resolves with the response body if the Orderbook is retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the Orderbook is not found.
-     * @throws {Error} If the response status code is not 200.
-     */
     fOrderbook(targetSymbol = "", baseSymbol="TUSDT", size=50){
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
@@ -660,21 +500,6 @@ class Bitmusa {
         });
     }
 
-    /**
-     * Retrieves the Position Open from the Bitmusa Future API.
-     * @param {string} targetSymbol - The target symbol to retrieve.
-     * @param {string} baseSymbol - The base symbol to retrieve.
-     * @param {string} margin_mode - The margin mode to retrieve.
-     * @param {string} position - The position to retrieve.
-     * @param {string} order_type - The order type to retrieve.
-     * @param {string} leverage - The leverage to retrieve.
-     * @param {string} order_price - The order price to retrieve.
-     * @param {string} order_qty - The order qty to retrieve.
-     * @returns {Promise} A Promise that resolves with the response body if the Position Open is retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the Position Open is not found.
-     * @throws {Error} If the response status code is not 200.
-     * @throws {Error} If the Position is not BUY or SELL.
-     */
     fOpen(targetSymbol = "", baseSymbol="TUSDT", margin_mode=0, position="buy", order_type=1, leverage=10, order_price=1, order_qty=0){
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
@@ -717,24 +542,6 @@ class Bitmusa {
     }
 
 
-    /**
-     * Position Close from the Bitmusa Future API.
-     * @param {string} targetSymbol - The target symbol to retrieve.
-     * @param {string} baseSymbol - The base symbol to retrieve.
-     * @param {string} margin_mode - The margin mode to retrieve.
-     * @param {string} position - The position to retrieve.
-     * @param {string} order_type - The order type to retrieve.
-     * @param {string} leverage - The leverage to retrieve.
-     * @param {string} order_price - The order price to retrieve.
-     * @param {string} order_qty - The order qty to retrieve.
-     * @returns {Promise} A Promise that resolves with the response body if the Position Close is retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the Position Close is not found.
-     * @throws {Error} If the response status code is not 200.
-     * @throws {Error} If the Position is not BUY or SELL.
-     * @throws {Error} If the Order Type is not 1 or 2.
-     * @throws {Error} If the Order Qty is not 0 or 1.
-     * @throws {Error} If the Order Price is not 0 or 1.
-     */
     fClose(targetSymbol = "", baseSymbol="TUSDT", margin_mode=0, position="buy", order_type=1, leverage=10, order_price=1, order_qty=0){
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
@@ -776,14 +583,6 @@ class Bitmusa {
         });
     }
 
-    /**
-     * All Position Close from the Bitmusa Future API.
-     * @param {string} targetSymbol - The target symbol to retrieve.
-     * @param {string} baseSymbol - The base symbol to retrieve.
-     * @returns {Promise} A Promise that resolves with the response body if the Position Close is retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the Position Close is not found.
-     * @throws {Error} If the response status code is not 200.
-     */
     fCloseAll(targetSymbol = "", baseSymbol="TUSDT"){
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
@@ -813,13 +612,6 @@ class Bitmusa {
         });
     }
 
-    /**
-     * Open Order Cancel from the Bitmusa Future API.
-     * @param {string} order_id - The order id to retrieve.
-     * @returns {Promise} A Promise that resolves with the response body if the Open Order Cancel is retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the Open Order Cancel is not found.
-     * @throws {Error} If the response status code is not 200.
-     */
     fCancel(order_id) {
         return new Promise((resolve, reject) => {
             request(this.buildRequestOptions(`/future-order/cancel/${order_id}`, 'PUT', {}), (error, response, body) => {
@@ -841,14 +633,6 @@ class Bitmusa {
         });
     }
 
-    /**
-     * All Open Order Cancel from the Bitmusa Future API.
-     * @param {string} targetSymbol - The target symbol to retrieve.
-     * @param {string} baseSymbol - The base symbol to retrieve.
-     * @returns {Promise} A Promise that resolves with the response body if the Open Order Cancel is retrieved successfully, or rejects with an error message otherwise.
-     * @throws {Error} If the Open Order Cancel is not found.
-     * @throws {Error} If the response status code is not 200.
-     */
     fCancelAll(targetSymbol = "", baseSymbol="TUSDT"){
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
