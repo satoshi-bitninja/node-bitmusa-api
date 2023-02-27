@@ -96,36 +96,31 @@ bitmusa.openOrders(1, 10).then(result => {
 
 ### Common
 - signIn() : Gets the authentication key.
-- getUserInfo(): Retrieves user information.
-- getServerStatus() : Gets the exchange server status.
+- getUserInfo(): Retrieves user information. [not supported]
+- getServerStatus() : Gets the exchange server status. [not supported]
 
 ### Spot
 - createOrder(): Creates an order.
-- createSellOrder(): Creates an sell order.
-- createBuyOrder(): Creates an buy order.
-- cancelOrder(): Cancels an order.
-- getOrder(): Gets details of a specific order.
-- getOpenOrderList(): Gets a list of open orders.
+- cancelOrder(): Cancels an order. 
+- getOrder(): Gets details of a specific order. [not supported]
+- getOpenOrderList(): Gets a list of all open orders. [not supported specific market]
 - getOrderList() : Gets the list of orders in a specific market.
 - getTradeList() : Retrieves the list of trades in a specific market.
 - getOrderBook() : Retrieves order book information for a specific market.
 - getTicker() : Gets the current ticker information for a specific market.
 - getRecentTrades(): Retrieves the recent trades of a specific market.
-- getMarketDetail() : Gets the details of a specific market.
+- getMarketDetail() : Gets the details of a specific market. [not supported]
 - getAssetHistory() : Retrieves deposit and withdrawal history.
 - getAssetBalance() : Retrieves the balance of a held asset.
 - getAssetList(): Gets the list of assets held.
 - getMarkets(): Gets the list of available markets.
-- requestWithdrawal(): Requests a withdrawal.
-- getDepositAddress(): Creates a deposit address.
-- getFees() : Retrieves transaction fee information.
+- requestWithdrawal(): Requests a withdrawal. [not supported]
+- getDepositAddress(): Creates a deposit address. [not supported]
+- getFees() : Retrieves transaction fee information. [not supported]
 
 ### Future
 - createFutureOrder(): Creates a future order.
-- createFutureSellOrder(): Creates a future sell order.
-- createFutureBuyOrder(): Creates a futures buy order.
-- closeFutureSellOrder(): Close a future sell order.
-- closeFutureBuyOrder(): Close a future buy order.
+- closeFutureOrder(): Close a future order.
 - cancelFutureOrder(): Cancels a futures order.
 - getFutureOrderPosition(): Gets details of a specific futures order position.
 - getFutureOpenOrderList(): Gets a list of open futures orders.
@@ -145,7 +140,7 @@ bitmusa.openOrders(1, 10).then(result => {
 # Example
 
 ## 1. signIn
-
+### **[Note]** this is private api. so you must grant permission to use this api. send email to support@bitmusa.com
 ```js
 bitmusa.signIn("[id]","[password]").then(result => {
     console.log(result);
