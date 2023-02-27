@@ -96,8 +96,8 @@ bitmusa.openOrders(1, 10).then(result => {
 
 ### Common
 - signIn() : Gets the authentication key.
-- getUserInfo(): Retrieves user information.
-- getServerStatus() : Gets the exchange server status.
+- getUserInfo(): Retrieves user information. [not supported]
+- getServerStatus() : Gets the exchange server status. [not supported]
 
 ### Spot
 - createOrder(): Creates an order.
@@ -145,7 +145,7 @@ bitmusa.openOrders(1, 10).then(result => {
 # Example
 
 ## 1. signIn
-
+### [!caution] this is private api. so you must grant permission to use this api. send email to support@bitmusa.com
 ```js
 bitmusa.signIn("[id]","[password]").then(result => {
     console.log(result);
