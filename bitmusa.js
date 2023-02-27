@@ -158,8 +158,8 @@ class Bitmusa {
         }
     }
 
-    async getOpenedOrders(pageNo = 1, pageSize = 10) {
-        const funcName = '[getOpenedOrders]:';
+    async getOpenOrderList(pageNo = 1, pageSize = 10) {
+        const funcName = '[getOpenOrderList]:';
         if (pageNo < 1) throw new Error(`${funcName} pageNo start from 1`);
 
         var parameters = {
@@ -184,8 +184,8 @@ class Bitmusa {
         }
     }
 
-    async getOrderedOrders(pageNo = 1, pageSize = 10, symbol = null) {
-        const funcName = '[getOrderedOrders]:';
+    async getOrderList(pageNo = 1, pageSize = 10, symbol = null) {
+        const funcName = '[getOrderList]:';
         if (pageNo < 1) throw new Error(`${funcName} pageNo start from 1`);
 
         var parameters = {
@@ -210,8 +210,8 @@ class Bitmusa {
     }
 
 
-    async getTradedOrders(pageNo = 1, pageSize = 10, symbol = null) {
-        const funcName = '[getTradedOrders]:';
+    async getTradeList(pageNo = 1, pageSize = 10, symbol = null) {
+        const funcName = '[getTradeList]:';
         if (pageNo < 1) throw new Error(`${funcName} pageNo start from 1`);
 
         var parameters = {
