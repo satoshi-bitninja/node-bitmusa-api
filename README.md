@@ -107,6 +107,7 @@ bitmusa.openOrders(1, 10).then(result => {
 - getOrderList() : Gets the list of orders in a specific market.
 - getTradeList() : Retrieves the list of trades in a specific market.
 - getOrderBook() : Retrieves order book information for a specific market.
+- fetchTickers() : Retrieves the ticker information
 - getTicker() : Gets the current ticker information for a specific market.
 - getRecentTrades(): Retrieves the recent trades of a specific market.
 - getMarketDetail() : Gets the details of a specific market. [not supported]
