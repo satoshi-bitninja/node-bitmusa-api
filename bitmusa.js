@@ -234,6 +234,25 @@ class Bitmusa {
             throw new Error(`${error.message}`);
         }
     }
+
+    async fetchTickers() {
+        const funcName = '[fetchTitkcers]:';
+
+        try {
+            const response = await this.requestAPI('/market/symbol-thumb', 'get');
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            } 
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
     
 
 
