@@ -196,7 +196,7 @@ class Bitmusa {
         }
     }
 
-    async getOpenOrderList(pageNo = 1, pageSize = 10) {
+    async fetchOpenOrders(pageNo = 1, pageSize = 10) {
         const funcName = '[getOpenOrderList]:';
         if (pageNo < 1) throw new Error(`${funcName} pageNo start from 1`);
 
