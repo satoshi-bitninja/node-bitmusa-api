@@ -318,7 +318,6 @@ class Bitmusa {
     
 
 
-
     async balance() {
         try {
             const options = this.buildRequestOptions('/users/asset/wallet', 'GET');
@@ -333,36 +332,6 @@ class Bitmusa {
         }
     }
 
-
-
-
-
-    price(targetSymbol = "", baseSymbol = "USDT") {
-        targetSymbol = targetSymbol.toUpperCase();
-        baseSymbol = baseSymbol.toUpperCase();
-        const pair = `${targetSymbol}/${baseSymbol}`;
-
-        return new Promise((resolve, reject) => {
-            request(this.buildRequestOptions("/market/symbol-thumb", 'GET'), (error, response, body) => {
-                if (error)
-                    reject(error);
-                else {
-                    if (response.statusCode !== 200) {
-                        reject("statusCode : " + response.statusCode);
-                    }
-
-                    let json = typeof body === 'object' ? body : JSON.parse(body);
-                    var ticker = json.find((item) => item.symbol == pair);
-                    if (ticker === undefined || ticker === null) {
-                        reject("ticker not found");
-                    } else {
-                        resolve(ticker.close);
-                    }
-                }
-            });
-        });
-
-    }
 
     wallet() {
         return new Promise((resolve, reject) => {
