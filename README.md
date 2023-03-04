@@ -118,7 +118,7 @@ bitmusa.openOrders(1, 10).then(result => {
 - getMarket() : Gets the details of a specific market. [not supported]
 #### Asset
 - fetchTransations() : Retrieves deposit and withdrawal history.
-- fetchBalances() : Retrieves the balance of a held asset.
+- fetchBalance() : Retrieves the balance of a held asset.
 - getBalance(): Get specific asset balance.
 - requestWithdrawal(): Requests a withdrawal. [not supported]
 - createDepositAddress(): Creates a deposit address. [not supported]
