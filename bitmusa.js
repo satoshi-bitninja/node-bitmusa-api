@@ -539,6 +539,30 @@ class Bitmusa {
         
     }
 
+    async cancelFutureOrder(order_id) {
+        const funcName = '[cancelFutureOrder]:';
+
+        if (!order_id) throw new Error(`${funcName} order_id is blank`);
+
+        var options = {
+            order_id: order_id
+        };
+
+        try {
+            const response = await this.requestAPI('/future-order/', 'delete', options);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+            
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
 
     fCloseAll(targetSymbol = "", baseSymbol = "TUSDT") {
         targetSymbol = targetSymbol.toUpperCase();
