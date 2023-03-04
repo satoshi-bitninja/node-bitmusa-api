@@ -789,29 +789,6 @@ class Bitmusa {
 
 
 
-    fCancel(order_id) {
-        return new Promise((resolve, reject) => {
-            request(this.buildRequestOptions(`/future-order/cancel/${order_id}`, 'PUT', {}), (error, response, body) => {
-                if (error)
-                    reject(error);
-                else {
-                    if (response.statusCode !== 200) {
-                        reject("statusCode : " + response.statusCode);
-                    }
-
-                    let json = typeof body === 'object' ? body : JSON.parse(body);
-                    if (error) {
-                        reject(json);
-                    } else {
-                        resolve(json);
-                    }
-                }
-            });
-        });
-    }
-
-
-
 
 }
 
