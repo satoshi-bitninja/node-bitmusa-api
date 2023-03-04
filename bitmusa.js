@@ -350,13 +350,18 @@ class Bitmusa {
 
 
     async fetchBalance() {
+        const funcName = '[fetchBalance]:';
+
         try {
-            const options = this.buildRequestOptions('/users/asset/wallet', 'GET');
-            const response = await axios(options);
+            const response = await this.requestAPI('/users/asset/wallet', 'get');
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
             const json = response.data;
-            if (typeof json.code === 'number' && json.code !== 0) {
-                throw new Error(json.message);
-            }
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            } 
+
             return json;
         } catch (error) {
             throw new Error(`Failed to balance: ${error.message}`);
