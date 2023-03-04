@@ -129,24 +129,33 @@ bitmusa.openOrders(1, 10).then(result => {
 - getTransactionFee() : get transaction fee information for specific token. [not supported]
 
 ### Future
+#### Order
 - openFutureOrder(): Creates a future order.
 - closeFutureOrder(): Close a future order.
+- closeAllFutureOrders(): Close all future orders.
 - cancelFutureOrder(): Cancels a futures order.
 - cancelAllFutureOrders(): Cancels all futures orders.
-- getFutureOrderPosition(): Gets details of a specific futures order position.
-- getFutureOpenOrderList(): Gets a list of open futures orders.
-- getFutureOrderList() : Gets a list of futures orders in a specific market.
-- getFutureTradeList() : Retrieves a list of futures trades in a specific market.
-- getFutureOrderBook() : Retrieves futures price information for a specific market.
+
+#### Trade
+- fetchFuturePositions(): Gets details of a specific futures order position.
+- fetchFutureOpenOrders(): Gets a list of open futures orders.
+- fetchFutureOrders() : Gets a list of futures orders in a specific market.
+- fetchFutureTrades() : Retrieves a list of futures trades in a specific market.
+
+#### Market
 - getFutureTicker() : Retrieves the current futures ticker information for a specific market.
-- getFutureRecentTrades(): Retrieves the recent futures transaction history of a specific market.
-- getFutureMarketDetail(): Gets the details of futures transactions in a specific market.
-- getFutureAssetHistory(): Gets the history of futures account deposits and withdrawals.
-- getFutureAssetBalance(): Gets the balance of assets held in the futures account.
-- getFutureAssetList(): Retrieves the list of futures account assets held.
-- getFutureMarkets() : Gets a list of available futures markets.
-- requestFutureWithdrawal() : Requests a withdrawal from a futures account.
-- getFutureFees(): Retrieves futures trading fee information.
+- fetchFutureMarkets(): Gets the list of available futures markets.
+- getFutureMarket(): Gets the details of futures transactions in a specific market.
+- fetchFutureOrderBook() : Retrieves futures price information for a specific market.
+- fetchFutureRecentTrades(): Retrieves the recent futures transaction history of a specific market.
+
+#### Asset
+- getFutureTransactions(): Gets the history of futures account deposits and withdrawals. [not supported]
+- getFutureBalance(): Gets the balance of assets held in the futures account.
+- requestFutureWithdrawal() : Requests a withdrawal from a futures account. [not supported]
+
+#### Other
+- getFutureTradingFees(): Retrieves futures trading fee information. [not supported]
 
 # Examples
 
