@@ -412,30 +412,6 @@ class Bitmusa {
     }
 
 
-    orderbook(targetSymbol = "", baseSymbol = "USDT") {
-        targetSymbol = targetSymbol.toUpperCase();
-        baseSymbol = baseSymbol.toUpperCase();
-        const pair = `${targetSymbol}/${baseSymbol}`;
-
-        return new Promise((resolve, reject) => {
-            request(this.buildRequestOptions("/market/exchange-plate-mini", 'GET', { symbol: `${pair}` }), (error, response, body) => {
-                if (error)
-                    reject(error);
-                else {
-                    if (response.statusCode !== 200) {
-                        reject("statusCode : " + response.statusCode);
-                    }
-
-                    let json = typeof body === 'object' ? body : JSON.parse(body);
-                    if (error) {
-                        reject(json);
-                    } else {
-                        resolve(json);
-                    }
-                }
-            });
-        });
-    }
 
     fLatestTrade(targetSymbol = "", baseSymbol = "TUSDT", size = 50) {
         targetSymbol = targetSymbol.toUpperCase();
