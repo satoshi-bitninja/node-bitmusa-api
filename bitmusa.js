@@ -564,6 +564,34 @@ class Bitmusa {
         }
     }
 
+    async cancelAllFutureOrder(targetSymbol = null, baseSymbol = "TUSDT") {
+        const funcName = '[cancelAllFutureOrder]:';
+
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}${baseSymbol}`;
+        
+        var options = {
+            ticker: `${pair}`
+        };
+
+        try {
+            const response = await this.requestAPI('/future-order/cancel_all', 'delete', options);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+    
     fCloseAll(targetSymbol = "", baseSymbol = "TUSDT") {
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
