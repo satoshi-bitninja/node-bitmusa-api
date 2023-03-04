@@ -123,8 +123,10 @@ bitmusa.openOrders(1, 10).then(result => {
 - requestWithdrawal(): Requests a withdrawal. [not supported]
 - createDepositAddress(): Creates a deposit address. [not supported]
 #### Other
-- fetchFees() : Retrieves transaction fee information. [not supported]
-- getFee() : get transaction fee information for specific token. [not supported]
+- fetchTradingFees() : Retrieves transaction fee information. [not supported]
+- getTradingFee() : get transaction fee information for specific token. [not supported]
+- fetchTransactionFees() : Retrieves transaction fee information. [not supported]
+- getTransactionFee() : get transaction fee information for specific token. [not supported]
 
 ### Future
 - createFutureOrder(): Creates a future order.
