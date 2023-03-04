@@ -184,3 +184,23 @@ bitmusa.signIn("[id]","[password]").then(result => {
     message: 'Incorrect username or password' 
 }
 ```
+
+## createOrder
+```js
+bitmusa.createOrder("BUY", "BTC/USDT","0.0001","LIMIT_PRICE", "23500.0").then(result => {
+    console.log(result);
+}).catch(err => {
+    console.log(err);
+});
+```
+
+### OK
+```js
+{ data: 'E167795149792251', code: 0, message: 'success' }
+```
+
+### Fail
+```js
+{ code: 4000, message: 'need sign in' }
+
+```
