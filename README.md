@@ -132,6 +132,7 @@ bitmusa.openOrders(1, 10).then(result => {
 - openFutureOrder(): Creates a future order.
 - closeFutureOrder(): Close a future order.
 - cancelFutureOrder(): Cancels a futures order.
+- cancelAllFutureOrders(): Cancels all futures orders.
 - getFutureOrderPosition(): Gets details of a specific futures order position.
 - getFutureOpenOrderList(): Gets a list of open futures orders.
 - getFutureOrderList() : Gets a list of futures orders in a specific market.
