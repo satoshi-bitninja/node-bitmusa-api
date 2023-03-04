@@ -100,6 +100,66 @@ bitmusa.openOrders(1, 10).then(result => {
 - getServerStatus() : Gets the exchange server status. [not supported]
 
 ### Spot
+
+#### Order
+- createOrder(): Creates an order.
+- cancelOrder(): Cancels an order. 
+- cancelAllOrders(): Cancels all orders.
+- fetchOpenOrders(): Gets a list of all open orders. [not supported specific market]
+- fetchOrders() : Gets the list of orders in a specific market.
+- getOrder(): Gets details of a specific order. [not supported]
+#### Trade
+- fetchTrades() : Retrieves the list of trades in a specific market.
+- fetchRecentTrades(): Retrieves the recent trades of a specific market.
+#### Market
+- fetchTickers() : Retrieves the ticker information
+- getTicker() : Gets the current ticker information for a specific market.
+- fetchOrderBook() : Retrieves order book information for a specific market.
+- fetchMarkets(): Gets the list of available markets. [not supported]
+- getMarket() : Gets the details of a specific market. [not supported]
+#### Asset
+- fetchTransations() : Retrieves deposit and withdrawal history.
+- fetchBalance() : Retrieves the balance of a held asset.
+- getBalance(): Get specific asset balance.
+- requestWithdrawal(): Requests a withdrawal. [not supported]
+- createDepositAddress(): Creates a deposit address. [not supported]
+#### Other
+- fetchTradingFees() : Retrieves transaction fee information. [not supported]
+- getTradingFee() : get transaction fee information for specific token. [not supported]
+- fetchTransactionFees() : Retrieves transaction fee information. [not supported]
+- getTransactionFee() : get transaction fee information for specific token. [not supported]
+
+### Future
+#### Order
+- openFutureOrder(): Creates a future order.
+- closeFutureOrder(): Close a future order.
+- closeAllFutureOrders(): Close all future orders.
+- cancelFutureOrder(): Cancels a futures order.
+- cancelAllFutureOrders(): Cancels all futures orders.
+
+#### Trade
+- fetchFuturePositions(): Gets details of a specific futures order position.
+- fetchFutureOpenOrders(): Gets a list of open futures orders.
+- fetchFutureOrders() : Gets a list of futures orders in a specific market.
+- fetchFutureTrades() : Retrieves a list of futures trades in a specific market.
+
+#### Market
+- getFutureTicker() : Retrieves the current futures ticker information for a specific market.
+- fetchFutureMarkets(): Gets the list of available futures markets.
+- getFutureMarket(): Gets the details of futures transactions in a specific market.
+- fetchFutureOrderBook() : Retrieves futures price information for a specific market.
+- fetchFutureRecentTrades(): Retrieves the recent futures transaction history of a specific market.
+
+#### Asset
+- getFutureTransactions(): Gets the history of futures account deposits and withdrawals. [not supported]
+- getFutureBalance(): Gets the balance of assets held in the futures account.
+- requestFutureWithdrawal() : Requests a withdrawal from a futures account. [not supported]
+
+#### Other
+- getFutureTradingFees(): Retrieves futures trading fee information. [not supported]
+
+# Examples
+
 - createOrder(): Creates an order.
 - cancelOrder(): Cancels an order. 
 - getOrder(): Gets details of a specific order. [not supported]
@@ -139,6 +199,7 @@ bitmusa.openOrders(1, 10).then(result => {
 
 # Example
 
+
 ## 1. signIn
 ### **[Note]** this is private api. so you must grant permission to use this api. send email to support@bitmusa.com
 ```js
@@ -173,4 +234,24 @@ bitmusa.signIn("[id]","[password]").then(result => {
     code: 20006, 
     message: 'Incorrect username or password' 
 }
+
+```
+
+## createOrder
+```js
+bitmusa.createOrder("BUY", "BTC/USDT","0.0001","LIMIT_PRICE", "23500.0").then(result => {
+    console.log(result);
+}).catch(err => {
+    console.log(err);
+});
+```
+
+### OK
+```js
+{ data: 'E167795149792251', code: 0, message: 'success' }
+```
+
+### Fail
+```js
+{ code: 4000, message: 'need sign in' }
 ```
