@@ -158,6 +158,44 @@ class Bitmusa {
         }
     }
 
+    async cancelAllOrders(targetSymbol = null, baseSymbol = 'USDT', direction = null) {
+        const funcName = '[cancelAllOrders]:';
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        if (!direction) direction = direction.toUpperCase();
+        
+        const pair = `${targetSymbol}/${baseSymbol}`;
+        if (direction == "BUY") direction = 0;
+        else if (direction == "SELL") direction = 1;
+
+        var options = {
+            symbol: pair,
+        };
+
+        if (!direction)
+        {
+            options = Object.assign(options, { direction: direction });
+        } else {
+            if (direction !== 'BUY' && direction !== 'SELL') {
+                throw new Error('[cancelAll] direction is not BUY or SELL');
+            }     
+        }
+
+        try {
+            const response = await this.requestAPI(`/exchange/order/cancel/all`, 'post', options);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            console.log(json);
+            if (json.code !== 0) {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+
     async getOpenOrderList(pageNo = 1, pageSize = 10) {
         const funcName = '[getOpenOrderList]:';
         if (pageNo < 1) throw new Error(`${funcName} pageNo start from 1`);
