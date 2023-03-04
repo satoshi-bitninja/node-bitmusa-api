@@ -100,24 +100,31 @@ bitmusa.openOrders(1, 10).then(result => {
 - getServerStatus() : Gets the exchange server status. [not supported]
 
 ### Spot
+#### Order
 - createOrder(): Creates an order.
 - cancelOrder(): Cancels an order. 
+- cancelAllOrders(): Cancels all orders.
+- fetchOpenOrders(): Gets a list of all open orders. [not supported specific market]
+- fetchOrders() : Gets the list of orders in a specific market.
 - getOrder(): Gets details of a specific order. [not supported]
-- getOpenOrderList(): Gets a list of all open orders. [not supported specific market]
-- getOrderList() : Gets the list of orders in a specific market.
-- getTradeList() : Retrieves the list of trades in a specific market.
-- getOrderBook() : Retrieves order book information for a specific market.
+#### Trade
+- fetchTrades() : Retrieves the list of trades in a specific market.
+- fetchRecentTrades(): Retrieves the recent trades of a specific market.
+#### Market
 - fetchTickers() : Retrieves the ticker information
 - getTicker() : Gets the current ticker information for a specific market.
-- getRecentTrades(): Retrieves the recent trades of a specific market.
-- getMarketDetail() : Gets the details of a specific market. [not supported]
-- getAssetHistory() : Retrieves deposit and withdrawal history.
-- getAssetBalance() : Retrieves the balance of a held asset.
-- getAssetList(): Gets the list of assets held.
-- getMarkets(): Gets the list of available markets.
+- fetchOrderBook() : Retrieves order book information for a specific market.
+- fetchMarkets(): Gets the list of available markets. [not supported]
+- getMarket() : Gets the details of a specific market. [not supported]
+#### Asset
+- fetchTransations() : Retrieves deposit and withdrawal history.
+- fetchBalances() : Retrieves the balance of a held asset.
+- getBalance(): Get specific asset balance.
 - requestWithdrawal(): Requests a withdrawal. [not supported]
-- getDepositAddress(): Creates a deposit address. [not supported]
-- getFees() : Retrieves transaction fee information. [not supported]
+- createDepositAddress(): Creates a deposit address. [not supported]
+#### Other
+- fetchFees() : Retrieves transaction fee information. [not supported]
+- getFee() : get transaction fee information for specific token. [not supported]
 
 ### Future
 - createFutureOrder(): Creates a future order.
@@ -138,7 +145,7 @@ bitmusa.openOrders(1, 10).then(result => {
 - requestFutureWithdrawal() : Requests a withdrawal from a futures account.
 - getFutureFees(): Retrieves futures trading fee information.
 
-# Example
+# Examples
 
 ## 1. signIn
 ### **[Note]** this is private api. so you must grant permission to use this api. send email to support@bitmusa.com
