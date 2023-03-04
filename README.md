@@ -129,7 +129,7 @@ bitmusa.openOrders(1, 10).then(result => {
 - getTransactionFee() : get transaction fee information for specific token. [not supported]
 
 ### Future
-- createFutureOrder(): Creates a future order.
+- openFutureOrder(): Creates a future order.
 - closeFutureOrder(): Close a future order.
 - cancelFutureOrder(): Cancels a futures order.
 - getFutureOrderPosition(): Gets details of a specific futures order position.
