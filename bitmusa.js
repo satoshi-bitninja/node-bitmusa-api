@@ -441,29 +441,31 @@ class Bitmusa {
         }
     }
 
-    fOrderbook(targetSymbol = "", baseSymbol = "TUSDT", size = 50) {
+    async futureOrderbook(targetSymbol = "", baseSymbol = "TUSDT", size = 50) {
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
         const pair = `${targetSymbol}${baseSymbol}`;
 
-        return new Promise((resolve, reject) => {
-            request(this.buildRequestOptions("/future-orderbook/", 'GET', { ticker: `${pair}`, size: size }), (error, response, body) => {
-                if (error)
-                    reject(error);
-                else {
-                    if (response.statusCode !== 200) {
-                        reject("statusCode : " + response.statusCode);
-                    }
+        var parameters = {
+            ticker : pair,
+            size : pageSize
+        }
 
-                    let json = typeof body === 'object' ? body : JSON.parse(body);
-                    if (error) {
-                        reject(json);
-                    } else {
-                        resolve(json);
-                    }
-                }
-            });
-        });
+        try {
+            const response = await this.requestAPI('/future-orderbook/', 'get', parameters);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            } 
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
     }
 
     fOpen(targetSymbol = "", baseSymbol = "TUSDT", margin_mode = 0, position = "buy", order_type = 1, leverage = 10, order_price = 1, order_qty = 0) {
