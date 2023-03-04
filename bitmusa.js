@@ -335,44 +335,6 @@ class Bitmusa {
 
 
 
-    cancelAll(targetSymbol = "", baseSymbol = "USDT", direction = "buy") {
-        targetSymbol = targetSymbol.toUpperCase();
-        baseSymbol = baseSymbol.toUpperCase();
-        direction = direction.toUpperCase();
-        const pair = `${targetSymbol}/${baseSymbol}`;
-        if (direction == "BUY") direction = 0;
-        else if (direction == "SELL") direction = 1;
-
-        if (direction !== 'BUY' && direction !== 'SELL') {
-            throw new Error('[cancelAll] direction is not BUY or SELL');
-        }
-
-        var options = {
-            symbol: pair,
-            direction: direction,
-            type: 1 // 0: Market Price, 1: Limit Price ??
-        };
-
-        return new Promise((resolve, reject) => {
-            request(this.buildRequestOptions("/exchange/order/cancel/all", 'POST', options), (error, response, body) => {
-                if (error)
-                    reject(error);
-                else {
-                    if (response.statusCode !== 200) {
-                        reject("statusCode : " + response.statusCode);
-                    } else {
-                        let json = typeof body === 'object' ? body : JSON.parse(body);
-                        if (json.code !== 0) {
-                            reject(json);
-                        } else {
-                            resolve(json);
-                        }
-                    }
-                }
-            });
-        });
-    }
-
 
     openOrders(page = 1, size = 10) {
         return new Promise((resolve, reject) => {
