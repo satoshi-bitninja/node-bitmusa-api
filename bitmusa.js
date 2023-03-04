@@ -620,6 +620,43 @@ class Bitmusa {
         }
     }
 
+    async getFutureOrder(order_id) {
+        throw new Error('Not implemented yet');
+    }
+
+    async fetchFutureOrders(targetSymbol = null, baseSymbol = "TUSDT", order_status = 0, page = 1, limit = 100) {
+        const funcName = '[fetchFutureOrders]:';
+
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}${baseSymbol}`;
+
+        var options = {
+            ticker: `${pair}`,
+            order_status: order_status,
+            page: page,
+            limit: limit
+        };
+
+        try {
+            const response = await this.requestAPI('/future-order', 'get', options);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+    
+
+
     fCancel(order_id) {
         return new Promise((resolve, reject) => {
             request(this.buildRequestOptions(`/future-order/cancel/${order_id}`, 'PUT', {}), (error, response, body) => {
