@@ -687,7 +687,7 @@ class Bitmusa {
         const funcName = '[fetchFutureBalance]:';
 
         try {
-            const response = await this.requestAPI('/future-balance', 'get', {});
+            const response = await this.requestAPI('/future-wallet/', 'get', {});
             if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
             const json = response.data;
             //console.log(json);
