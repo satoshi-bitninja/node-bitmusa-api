@@ -273,6 +273,37 @@ class Bitmusa {
         }
     }
 
+    async getRecentTrades(targetSymbol = null, baseSymbol = "USDT", pageSize = 20) {
+        const funcName = '[getRecentTrades]:';
+
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}/${baseSymbol}`;
+
+        var parameters = {
+            symbol : pair,
+            size : pageSize
+        }
+
+        try {
+            const response = await this.requestAPI('/market/latest-trade', 'get', parameters);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            } 
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+
+    
+
     async fetchTickers() {
         const funcName = '[fetchTitkcers]:';
 
