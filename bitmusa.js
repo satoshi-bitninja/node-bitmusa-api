@@ -640,7 +640,38 @@ class Bitmusa {
         };
 
         try {
-            const response = await this.requestAPI('/future-order', 'get', options);
+            const response = await this.requestAPI('/future-order/history', 'get', options);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+    
+    async fetchFutureTrades(targetSymbol = null, baseSymbol = "TUSDT", order_status = 0, page = 1, limit = 100) {
+        const funcName = '[fetchFutureTrades]:';
+
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}${baseSymbol}`;
+
+        var options = {
+            ticker: `${pair}`,
+            order_status: order_status,
+            page: page,
+            limit: limit
+        };
+
+        try {
+            const response = await this.requestAPI('/future-trade/history', 'get', options);
             if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
             const json = response.data;
             //console.log(json);
@@ -753,6 +784,7 @@ class Bitmusa {
         }
     }
 
+    
 
 
 
