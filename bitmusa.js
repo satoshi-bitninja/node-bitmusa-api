@@ -427,6 +427,8 @@ class Bitmusa {
     }
 
     async futureOrderbook(targetSymbol = "", baseSymbol = "TUSDT", size = 50) {
+        const funcName = '[futureOrderbook]:';
+
         if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
@@ -453,7 +455,10 @@ class Bitmusa {
         }
     }
 
-    fOpen(targetSymbol = "", baseSymbol = "TUSDT", margin_mode = 0, position = "buy", order_type = 1, leverage = 10, order_price = 1, order_qty = 0) {
+    async openFutureOrder(targetSymbol = null, baseSymbol = "TUSDT", margin_mode = 0, position = "buy", order_type = 1, leverage = 10, order_price = 1, order_qty = 0) {
+        const funcName = '[openFutureOrder]:';
+
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
         const pair = `${targetSymbol}${baseSymbol}`;
@@ -474,24 +479,64 @@ class Bitmusa {
             order_qty: order_qty
         };
 
-        return new Promise((resolve, reject) => {
-            request(this.buildRequestOptions("/future-order/", 'POST', options), (error, response, body) => {
-                if (error)
-                    reject(error);
-                else {
-                    if (response.statusCode !== 200) {
-                        reject("statusCode : " + response.statusCode);
-                    }
+        try {
+            const response = await this.requestAPI('/future-order/', 'post', options);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
 
-                    let json = typeof body === 'object' ? body : JSON.parse(body);
-                    if (error) {
-                        reject(json);
-                    } else {
-                        resolve(json);
-                    }
-                }
-            });
-        });
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+
+        
+    }
+
+    async closeFutureOrder(targetSymbol = null, baseSymbol = "TUSDT", margin_mode = 0, position = "buy", order_type = 1, leverage = 10, order_price = 1, order_qty = 0) {
+        const funcName = '[closeFutureOrder]:';
+
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}${baseSymbol}`;
+
+        position = position.toUpperCase();
+        if (position != "BUY" && position != "SELL") throw new Error("Position must be BUY or SELL");
+        if (position == "BUY") position = 0; // long
+        if (position == "SELL") position = 1; // short
+
+        var options = {
+            direction: 0, // 0: Open, 1: Close
+            ticker: `${pair}`,
+            margin_mode: margin_mode,
+            position: position,
+            order_type: order_type,
+            leverage: leverage,
+            order_price: order_price,
+            order_qty: order_qty
+        };
+
+        try {
+            const response = await this.requestAPI('/future-order/', 'post', options);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+
+        
     }
 
 
