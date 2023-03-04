@@ -412,6 +412,34 @@ class Bitmusa {
     }
 
 
+    async fetchFutureRecentTrades(targetSymbol = null, baseSymbol = "USDT", pageSize = 50) {
+        const funcName = '[getRecentTrades]:';
+
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}${baseSymbol}`;
+
+        var parameters = {
+            ticker : pair,
+            size : pageSize
+        }
+
+        try {
+            const response = await this.requestAPI('/future-market-trade/', 'get', parameters);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            } 
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
 
     fLatestTrade(targetSymbol = "", baseSymbol = "TUSDT", size = 50) {
         targetSymbol = targetSymbol.toUpperCase();
