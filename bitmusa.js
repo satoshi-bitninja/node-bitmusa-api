@@ -812,32 +812,6 @@ class Bitmusa {
 
 
 
-    buildRequestOptions(path, method, parameter = null) {
-
-        let options = {
-            url: this.options.baseURL + path,
-            json: true,
-            method: method.toUpperCase(),
-            timeout: this.options.timeOut,
-            cache: false,
-            headers: {
-                'x-auth-token': this.options.authKey,
-                'Content-Type': 'application/json'
-            }
-        };
-
-        if ((method.toUpperCase() === 'GET') && (parameter)) {
-            options.url += '?' + querystring.stringify(parameter);
-        }
-
-        if (parameter) {
-            options = Object.assign(options, { body: parameter });
-        }
-
-        console.log(options);
-
-        return options;
-    }
 
 }
 
