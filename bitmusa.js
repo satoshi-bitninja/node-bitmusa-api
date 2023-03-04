@@ -349,7 +349,7 @@ class Bitmusa {
     
 
 
-    async balance() {
+    async fetchBalance() {
         try {
             const options = this.buildRequestOptions('/users/asset/wallet', 'GET');
             const response = await axios(options);
