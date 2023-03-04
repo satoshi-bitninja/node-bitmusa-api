@@ -297,27 +297,6 @@ class Bitmusa {
 
 
 
-    cancel(orderId) {
-        return new Promise((resolve, reject) => {
-            request(this.buildRequestOptions("/exchange/order/cancel/" + orderId, 'GET'), (error, response, body) => {
-                if (error)
-                    reject(error);
-                else {
-                    if (response.statusCode !== 200) {
-                        reject("statusCode : " + response.statusCode);
-                    }
-
-                    let json = typeof body === 'object' ? body : JSON.parse(body);
-                    if (json.code !== 0) {
-                        reject(json);
-                    } else {
-                        resolve(json);
-                    }
-                }
-            });
-        });
-    }
-
     cancelAll(targetSymbol = "", baseSymbol = "USDT", direction = "buy") {
         targetSymbol = targetSymbol.toUpperCase();
         baseSymbol = baseSymbol.toUpperCase();
