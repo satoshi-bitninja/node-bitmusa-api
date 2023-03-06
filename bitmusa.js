@@ -564,8 +564,8 @@ class Bitmusa {
         }
     }
 
-    async cancelAllFutureOrder(targetSymbol = null, baseSymbol = "TUSDT") {
-        const funcName = '[cancelAllFutureOrder]:';
+    async cancelAllFutureOrders(targetSymbol = null, baseSymbol = "TUSDT") {
+        const funcName = '[cancelAllFutureOrders]:';
 
         if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
         targetSymbol = targetSymbol.toUpperCase();
@@ -592,8 +592,8 @@ class Bitmusa {
         }
     }
 
-    async closeAllFutureOrder(targetSymbol = null, baseSymbol = "TUSDT") {
-        const funcName = '[closeAllFutureOrder]:';
+    async closeAllFutureOrders(targetSymbol = null, baseSymbol = "TUSDT") {
+        const funcName = '[closeAllFutureOrders]:';
 
         if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
         targetSymbol = targetSymbol.toUpperCase();
