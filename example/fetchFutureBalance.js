@@ -3,8 +3,6 @@ const bitmusa = new Bitmusa('a3f74de1-b23b-4758-9621-b4925a3876bd');
 
 (async function(){
 
-    bitmusa.setBaseURL("https://qa-api.teamneonex.com");
-
     bitmusa.fetchFutureBalance().then(result => {
         console.log(result);
     }).catch(err => {
