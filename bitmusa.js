@@ -222,8 +222,8 @@ class Bitmusa {
         }
     }
 
-    async getOrders(pageNo = 1, pageSize = 10, symbol = null) {
-        const funcName = '[getOrders]:';
+    async fetchOrders(pageNo = 1, pageSize = 10, symbol = null) {
+        const funcName = '[fetchOrders]:';
         if (pageNo < 1) throw new Error(`${funcName} pageNo start from 1`);
 
         var parameters = {
