@@ -144,15 +144,18 @@ bitmusa.fetchOpenOrders(1, 10).then(result => {
 - fetchFutureTrades() : Retrieves a list of futures trades in a specific market.
 
 #### Market
+- fetchFutureTickers() : Retrieves the current futures ticker information for a specific market. [not supported]
 - getFutureTicker() : Retrieves the current futures ticker information for a specific market.
-- fetchFutureMarkets(): Gets the list of available futures markets.
-- getFutureMarket(): Gets the details of futures transactions in a specific market.
+- getFuturePrice() : Get futures price for a specific market.
+- fetchFutureMarkets(): Gets the list of available futures markets. [not supported]
+- getFutureMarket(): Gets the details of futures transactions in a specific market. [not supported]
 - fetchFutureOrderBook() : Retrieves futures price information for a specific market.
 - fetchFutureRecentTrades(): Retrieves the recent futures transaction history of a specific market.
 
 #### Asset
-- getFutureTransactions(): Gets the history of futures account deposits and withdrawals. [not supported]
+- fetchFutureBalance(): Retrieves the balance of assets held in the futures account.
 - getFutureBalance(): Gets the balance of assets held in the futures account.
+- getFutureTransactions(): Gets the history of futures account deposits and withdrawals. [not supported]
 - requestFutureWithdrawal() : Requests a withdrawal from a futures account. [not supported]
 
 #### Other

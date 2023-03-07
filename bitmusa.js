@@ -884,7 +884,38 @@ class Bitmusa {
         }
     }
 
-    
+    async getFuturePrice(targetSymbol = null, baseSymbol = "TUSDT") {
+        const funcName = '[getFuturePrice]:';
+
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}${baseSymbol}`;
+
+        var options = {
+            ticker: `${pair}`
+        };
+
+        try {
+            const response = await this.requestAPI('/future-board/', 'get', options);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+
+            if (json.ticker===pair)
+            {
+                return json.last_price;
+            }
+
+            throw new Error(`${funcName} ${pair} is not found`);
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
 
 
 
