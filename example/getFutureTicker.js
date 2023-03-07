@@ -1,4 +1,4 @@
-const Bitmusa = require('../bitmusa');
+const Bitmusa = require('node-bitmusa-api');
 const bitmusa = new Bitmusa('dummy_key');
 
 (async function(){

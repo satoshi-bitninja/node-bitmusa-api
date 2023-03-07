@@ -3,7 +3,8 @@ const bitmusa = new Bitmusa('dummy_key');
 
 (async function(){
 
-    bitmusa.fetchFutureBalance().then(result => {
+
+    bitmusa.getFutureBalance("TUSDT").then(result => {
         console.log(result);
     }).catch(err => {
         console.log(err);
@@ -13,7 +14,6 @@ const bitmusa = new Bitmusa('dummy_key');
 })();
 
 /*
-[
   {
     symbol: 'TUSDT',
     total_wallet_balance: 100000,
@@ -22,8 +22,6 @@ const bitmusa = new Bitmusa('dummy_key');
     total_unpnl: 0,
     position: []
   }
-]
 
-{ code: 4000, message: 'need sign in' }
 
 */
