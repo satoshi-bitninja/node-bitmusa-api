@@ -424,6 +424,7 @@ class Bitmusa {
             {
                 throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
             } 
+            if (json=="") throw new Error(`${funcName} ${pair} is not found`);
 
             return json;
         } catch (error) {
