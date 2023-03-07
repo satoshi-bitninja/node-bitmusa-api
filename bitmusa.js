@@ -378,6 +378,31 @@ class Bitmusa {
         }
     }
 
+    async getBalance(symbol = null) {
+        const funcName = '[getBalance]:';
+
+        if (!symbol) throw new Error(`${funcName} symbol is blank`);
+        symbol = symbol.toUpperCase();
+
+        try {
+            const response = await this.requestAPI('/users/asset/wallet', 'get');
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json.data);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            } 
+            if (!json.data) throw new Error(`${funcName} data node is not found`);
+            const balance = json.data.find((item) => item.coin.unit == symbol);
+            if (!balance) throw new Error(`${funcName} ${symbol} is not found`);
+
+            return balance;
+        } catch (error) {
+            throw new Error(`Failed to balance: ${error.message}`);
+        }
+    }
+
 
 
     async fetchOrderBook(targetSymbol = null, baseSymbol = "USDT") {
