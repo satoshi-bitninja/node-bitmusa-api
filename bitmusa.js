@@ -809,7 +809,7 @@ class Bitmusa {
     }
 
     async getFutureBalance(symbol = null) {
-        const funcName = '[fetchFutureBalance]:';
+        const funcName = '[getFutureBalance]:';
 
         if (!symbol) throw new Error(`${funcName} symbol is blank`);
         symbol = symbol.toUpperCase();
