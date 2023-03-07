@@ -808,6 +808,30 @@ class Bitmusa {
         }
     }
 
+    async getFutureBalance(symbol = null) {
+        const funcName = '[fetchFutureBalance]:';
+
+        if (!symbol) throw new Error(`${funcName} symbol is blank`);
+        symbol = symbol.toUpperCase();
+
+        try {
+            const response = await this.requestAPI('/future-wallet/', 'get', {});
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+
+            const balance = json.find((item) => item.symbol === symbol);
+
+            return balance;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+
     async fetchFutureTickers() {
         const funcName = '[fetchFutureTickers]:';
 
