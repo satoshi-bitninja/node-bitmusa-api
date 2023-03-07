@@ -369,6 +369,32 @@ class Bitmusa {
             throw new Error(`${error.message}`);
         }
     }
+
+    async getPrice(targetSymbol = null, baseSymbol = "USDT") {
+        const funcName = '[getPrice]:';
+
+        if (targetSymbol === null) throw new Error(`${funcName} targetSymbol is blank`);
+        const pair = targetSymbol + "/" + baseSymbol;
+
+        try {
+            const response = await this.requestAPI('/market/symbol-thumb', 'get');
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            } 
+
+            const ticker = json.find((item) => item.symbol == pair);
+            if (!ticker) throw new Error(`${funcName} ${pair} is not found`);
+
+            return ticker.close;
+
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
     
 
 
