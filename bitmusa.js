@@ -813,6 +813,7 @@ class Bitmusa {
 
 
         var options = {
+            ticker : "TBTCTUSDT" // required, not supported all tickers
         };
 
         try {
