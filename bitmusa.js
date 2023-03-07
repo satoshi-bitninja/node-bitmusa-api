@@ -501,7 +501,7 @@ class Bitmusa {
         }
     }
 
-    async futureOrderbook(targetSymbol = "", baseSymbol = "TUSDT", size = 50) {
+    async fetchFutureOrderbook(targetSymbol = "", baseSymbol = "TUSDT", size = 50) {
         const funcName = '[futureOrderbook]:';
 
         if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
@@ -511,7 +511,7 @@ class Bitmusa {
 
         var parameters = {
             ticker : pair,
-            size : pageSize
+            size : size
         }
 
         try {
