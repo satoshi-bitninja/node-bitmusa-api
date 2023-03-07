@@ -3,7 +3,7 @@ const bitmusa = new Bitmusa('dummy_key');
 
 (async function(){
 
-    bitmusa.fLatestTrade("TBTC","TUSDT").then(result => {
+    bitmusa.fetchRecentTrades("BTC","USDT").then(result => {
         console.log(result);
     }).catch(err => {
         console.log(err);

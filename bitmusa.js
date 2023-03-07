@@ -273,7 +273,7 @@ class Bitmusa {
         }
     }
 
-    async getRecentTrades(targetSymbol = null, baseSymbol = "USDT", pageSize = 20) {
+    async fetchRecentTrades(targetSymbol = null, baseSymbol = "USDT", pageSize = 20) {
         const funcName = '[getRecentTrades]:';
 
         if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
