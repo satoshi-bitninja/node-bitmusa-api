@@ -222,9 +222,14 @@ class Bitmusa {
         }
     }
 
-    async fetchOrders(pageNo = 1, pageSize = 10, symbol = null) {
+    async fetchOrders(pageNo = 1, pageSize = 10, targetSymbol = null, baseSymbol = "USDT") {
         const funcName = '[fetchOrders]:';
         if (pageNo < 1) throw new Error(`${funcName} pageNo start from 1`);
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const symbol = `${targetSymbol}/${baseSymbol}`;
+
 
         var parameters = {
             pageNo : pageNo, // 1 is start, not 0
@@ -248,9 +253,13 @@ class Bitmusa {
     }
 
 
-    async fetchTrades(pageNo = 1, pageSize = 10, symbol = null) {
+    async fetchTrades(pageNo = 1, pageSize = 10, targetSymbol = null, baseSymbol = "USDT") {
         const funcName = '[fetchOrders]:';
         if (pageNo < 1) throw new Error(`${funcName} pageNo start from 1`);
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const symbol = `${targetSymbol}/${baseSymbol}`;
 
         var parameters = {
             pageNo : pageNo, // 1 is start, not 0
