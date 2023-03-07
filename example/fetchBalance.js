@@ -4,7 +4,7 @@ const bitmusa = new Bitmusa('dummy_key');
 (async function(){
 
     bitmusa.fetchBalance().then(result => {
-        console.log(result.data[0]);
+        console.log(result);
     }).catch(err => {
         console.log(err);
     });
@@ -16,11 +16,6 @@ const bitmusa = new Bitmusa('dummy_key');
 {
   data: [
     {
-      id: 1271,
-      memberId: 73642,
-      coin: 
-      
-        {
         id: 1271,
         memberId: 73642,
         coin: {
@@ -75,18 +70,6 @@ const bitmusa = new Bitmusa('dummy_key');
         tag: null,
         memo: null,
         isLock: 0
-        }      
-      
-      ,
-      balance: 16712.50069,
-      frozenBalance: 26635.9504281,
-      lockedBalance: 0,
-      toReleased: 0,
-      networkCoin: null,
-      address: '0xD7C4eBC0759FB476be46F971C88C9226d14dB7d2',
-      tag: null,
-      memo: null,
-      isLock: 0
     },
     {
       id: 1263,
