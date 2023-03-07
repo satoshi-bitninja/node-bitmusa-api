@@ -121,12 +121,12 @@ class Bitmusa {
         } else {
             parameters = Object.assign(parameters, { type: 'MARKET_PRICE', price: "0" });
         }
-        console.log(parameters);
+        //console.log(parameters);
         try {
             const response = await this.requestAPI('/exchange/order/add', 'get', parameters);
             if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
             const json = response.data;
-            console.log(json);
+            //console.log(json);
             if (json.code !== 0) {
                 throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
             }
@@ -147,7 +147,7 @@ class Bitmusa {
             const response = await this.requestAPI(`/exchange/order/cancel/${orderId}`, 'post');
             if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
             const json = response.data;
-            console.log(json);
+            //console.log(json);
             if (json.code !== 0) {
                 throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
             }
@@ -160,29 +160,42 @@ class Bitmusa {
 
     async cancelAllOrders(targetSymbol = null, baseSymbol = 'USDT', direction = null) {
         const funcName = '[cancelAllOrders]:';
-        targetSymbol = targetSymbol.toUpperCase();
-        baseSymbol = baseSymbol.toUpperCase();
-        if (!direction) direction = direction.toUpperCase();
+        // direction is not working from API server
+        // targetSymbol is not working from API server
+        // baseSymbol is not working from API server
+        // only cancel all orders
         
-        const pair = `${targetSymbol}/${baseSymbol}`;
-        if (direction == "BUY") direction = 0;
-        else if (direction == "SELL") direction = 1;
-
         var options = {
-            symbol: pair,
         };
 
-        if (!direction)
+        var pair = "";
+
+        if (targetSymbol)
         {
-            options = Object.assign(options, { direction: direction });
-        } else {
-            if (direction !== 'BUY' && direction !== 'SELL') {
-                throw new Error('[cancelAll] direction is not BUY or SELL');
-            }     
+            targetSymbol = targetSymbol.toUpperCase();
+            baseSymbol = baseSymbol.toUpperCase();
+            pair = `${targetSymbol}/${baseSymbol}`;
+            options = Object.assign(options, { symbol: pair });
         }
 
+        if (direction==null)
+        {
+            // cancel all direction
+        } else {
+            direction = direction.toUpperCase();
+            if (direction !== 'BUY' && direction !== 'SELL') {
+                throw new Error('[cancelAll] direction is not BUY or SELL or null');
+            } else {
+                if (direction=="BUY") direction = 0;
+                if (direction=="SELL") direction = 1;
+                options = Object.assign(options, { direction: direction });
+            }
+        } 
+
+        console.log(options);
+
         try {
-            const response = await this.requestAPI(`/exchange/order/cancel/all`, 'post', options);
+            const response = await this.requestAPI(`/exchange/order/cancelall`, 'post', options);
             if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
             const json = response.data;
             console.log(json);
