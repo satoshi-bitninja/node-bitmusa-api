@@ -349,6 +349,7 @@ class Bitmusa {
             } 
 
             const ticker = json.find((item) => item.symbol == pair);
+            if (!ticker) throw new Error(`${funcName} ${pair} is not found`);
 
             return ticker;
         } catch (error) {
