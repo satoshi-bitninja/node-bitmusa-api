@@ -388,7 +388,7 @@ class Bitmusa {
 
             const ticker = json.find((item) => item.symbol == pair);
             if (!ticker) throw new Error(`${funcName} ${pair} is not found`);
-
+            if (!ticker.close) throw new Error(`${funcName} ${pair} close price is not found`);
             return ticker.close;
 
         } catch (error) {
