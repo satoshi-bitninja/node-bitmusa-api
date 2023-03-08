@@ -620,11 +620,10 @@ class Bitmusa {
         if (!order_id) throw new Error(`${funcName} order_id is blank`);
 
         var options = {
-            order_id: order_id
         };
 
         try {
-            const response = await this.requestAPI('/future-order/', 'delete', options);
+            const response = await this.requestAPI(`/future-order/cancel/${order_id}`, 'put', options);
             if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
             const json = response.data;
             //console.log(json);
