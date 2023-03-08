@@ -800,17 +800,24 @@ class Bitmusa {
     async fetchFuturePositions(targetSymbol = null, baseSymbol = "TUSDT") {
         const funcName = '[fetchFuturePositions]:';
 
-        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
-        targetSymbol = targetSymbol.toUpperCase();
-        baseSymbol = baseSymbol.toUpperCase();
-        const pair = `${targetSymbol}${baseSymbol}`;
-        
+        var pair = null;
         var options = {
-            ticker: `${pair}`
         };
 
+        if (!targetSymbol) 
+        {
+            options = {};
+        } else {
+            targetSymbol = targetSymbol.toUpperCase();
+            baseSymbol = baseSymbol.toUpperCase();
+            const pair = `${targetSymbol}${baseSymbol}`;
+
+            options = {...options, ticker: `${pair}` };
+        }
+        
+
         try {
-            const response = await this.requestAPI('/future-position', 'get', options);
+            const response = await this.requestAPI('/future-position/', 'get', options);
             if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
             const json = response.data;
             //console.log(json);
