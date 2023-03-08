@@ -640,18 +640,24 @@ class Bitmusa {
 
     async cancelAllFutureOrders(targetSymbol = null, baseSymbol = "TUSDT") {
         const funcName = '[cancelAllFutureOrders]:';
+        var pair = null;
 
-        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
-        targetSymbol = targetSymbol.toUpperCase();
-        baseSymbol = baseSymbol.toUpperCase();
-        const pair = `${targetSymbol}${baseSymbol}`;
+        if (!targetSymbol)
+        {
+            pair = "all";
+        } else {
+            targetSymbol = targetSymbol.toUpperCase();
+            baseSymbol = baseSymbol.toUpperCase();
+    
+            pair = `${targetSymbol}${baseSymbol}`;    
+        }
         
         var options = {
             ticker: `${pair}`
         };
 
         try {
-            const response = await this.requestAPI('/future-order/cancel_all', 'delete', options);
+            const response = await this.requestAPI('/future-order/cancel_all', 'put', options);
             if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
             const json = response.data;
             //console.log(json);
