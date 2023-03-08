@@ -774,20 +774,25 @@ class Bitmusa {
         }
     }
     
-    async fetchFutureTrades(targetSymbol = null, baseSymbol = "TUSDT", order_status = 0, page = 1, limit = 100) {
+    async fetchFutureTrades(targetSymbol = null, baseSymbol = "TUSDT", size=50, start_time = null, end_time = null) {
         const funcName = '[fetchFutureTrades]:';
 
-        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
-        targetSymbol = targetSymbol.toUpperCase();
-        baseSymbol = baseSymbol.toUpperCase();
-        const pair = `${targetSymbol}${baseSymbol}`;
-
+        var pair = null;
         var options = {
-            ticker: `${pair}`,
-            order_status: order_status,
-            page: page,
-            limit: limit
+            size: size
         };
+        if (!targetSymbol)
+        {
+            
+        } else {
+            targetSymbol = targetSymbol.toUpperCase();
+            baseSymbol = baseSymbol.toUpperCase();
+            pair = `${targetSymbol}${baseSymbol}`;
+            options = { ...options, ticker: `${pair}` };
+        }
+
+        if (start_time!==null) options = { ...options, start_time: start_time };
+        if (end_time!==null) options = { ...options, end_time: end_time };
 
         try {
             const response = await this.requestAPI('/future-trade/history', 'get', options);
