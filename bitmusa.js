@@ -699,6 +699,37 @@ class Bitmusa {
         throw new Error('Not implemented yet');
     }
 
+    async fetchFutureOpenOrders(targetSymbol = null, baseSymbol = "TUSDT", size=50, start_time=null) {
+        const funcName = '[fetchFutureOrders]:';
+
+        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
+        targetSymbol = targetSymbol.toUpperCase();
+        baseSymbol = baseSymbol.toUpperCase();
+        const pair = `${targetSymbol}${baseSymbol}`;
+
+        var options = {
+            ticker: `${pair}`,
+            size: size
+        };
+
+        if (start_time) options = { ...options, start_time: start_time };
+
+        try {
+            const response = await this.requestAPI('/future-order/', 'get', options);
+            if (response.status !== 200) throw new Error(`${funcName} ${response.status}`);
+            const json = response.data;
+            //console.log(json);
+            if ((json.code) && (json.code !== 0))
+            {
+                throw new Error(`${funcName} ${response.data.message}[code:${json.code}]`);
+            }
+
+            return json;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+
     async fetchFutureOrders(targetSymbol = null, baseSymbol = "TUSDT", order_status = 0, page = 1, limit = 100) {
         const funcName = '[fetchFutureOrders]:';
 
