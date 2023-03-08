@@ -735,20 +735,28 @@ class Bitmusa {
         }
     }
 
-    async fetchFutureOrders(targetSymbol = null, baseSymbol = "TUSDT", order_status = 0, page = 1, limit = 100) {
+    async fetchFutureOrders(targetSymbol = null, baseSymbol = "TUSDT", size = 50, direction = null, position = null, order_type = null, order_status = null, start_time = null, end_time = null) {
         const funcName = '[fetchFutureOrders]:';
 
-        if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
-        targetSymbol = targetSymbol.toUpperCase();
-        baseSymbol = baseSymbol.toUpperCase();
-        const pair = `${targetSymbol}${baseSymbol}`;
-
+        var pair = null;
         var options = {
-            ticker: `${pair}`,
-            order_status: order_status,
-            page: page,
-            limit: limit
+            size: size
         };
+
+        if (!targetSymbol)
+        {
+            targetSymbol = targetSymbol.toUpperCase();
+            baseSymbol = baseSymbol.toUpperCase();
+            pair = `${targetSymbol}${baseSymbol}`;
+            options = { ...options, ticker: `${pair}` };
+        }
+        if (direction!==null) options = { ...options, direction: direction }; // 0:open, 1:close
+        if (position!==null) options = { ...options, position: position }; // 0:long, 1:short
+        if (order_type!==null) options = { ...options, order_type: order_type }; //0: market, 1: limit, 2: take profit, 3: stop loss, 4: liquidation
+        if (order_status!==null) options = { ...options, status: order_status }; //2: cancelled, 3: filled
+        if (start_time!==null) options = { ...options, start_time: start_time }; // timestamp millisecond
+        if (end_time!==null) options = { ...options, end_time: end_time }; // timestamp millisecond
+
 
         try {
             const response = await this.requestAPI('/future-order/history', 'get', options);
