@@ -586,7 +586,7 @@ class Bitmusa {
         if (position == "SELL") position = 1; // short
 
         var options = {
-            direction: 0, // 0: Open, 1: Close
+            direction: 1, // 0: Open, 1: Close
             ticker: `${pair}`,
             margin_mode: margin_mode, // ISOLATED(0), CROSS(1)
             position: position, // BUY - Long(0), SELL - Short(1)
