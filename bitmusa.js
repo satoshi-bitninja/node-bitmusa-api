@@ -531,7 +531,7 @@ class Bitmusa {
     }
 
     async openFuturePosition(targetSymbol = null, baseSymbol = "TUSDT", margin_mode = 0, position = "buy", order_type = 1, leverage = 10, order_price = 1, order_qty = 0) {
-        const funcName = '[openFutureOrder]:';
+        const funcName = '[openFuturePosition]:';
 
         if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
         targetSymbol = targetSymbol.toUpperCase();
@@ -572,8 +572,8 @@ class Bitmusa {
         
     }
 
-    async closeFutureOrder(targetSymbol = null, baseSymbol = "TUSDT", margin_mode = 0, position = "buy", order_type = 1, leverage = 10, order_price = 1, order_qty = 0) {
-        const funcName = '[closeFutureOrder]:';
+    async closeFuturePosition(targetSymbol = null, baseSymbol = "TUSDT", margin_mode = 0, position = "buy", order_type = 1, leverage = 10, order_price = 1, order_qty = 0) {
+        const funcName = '[closeFuturePosition]:';
 
         if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
         targetSymbol = targetSymbol.toUpperCase();
