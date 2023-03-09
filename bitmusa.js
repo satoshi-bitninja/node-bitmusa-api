@@ -530,7 +530,7 @@ class Bitmusa {
         }
     }
 
-    async openFuturePosition(targetSymbol = null, baseSymbol = "TUSDT", margin_mode = 0, position = "buy", order_type = 1, leverage = 10, order_price = 1, order_qty = 0) {
+    async openFuturePosition(targetSymbol = null, baseSymbol = "TUSDT", margin_mode = 0, position = "BUY", order_type = 1, leverage = 10, order_price = 1, order_qty = 0) {
         const funcName = '[openFuturePosition]:';
 
         if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
@@ -546,9 +546,9 @@ class Bitmusa {
         var options = {
             direction: 0, // 0: Open, 1: Close
             ticker: `${pair}`,
-            margin_mode: margin_mode,
-            position: position,
-            order_type: order_type,
+            margin_mode: margin_mode, // ISOLATED(0), CROSS(1)
+            position: position, // BUY - Long(0), SELL - Short(1)
+            order_type: order_type, // 0: Market, 1: Limit
             leverage: leverage,
             order_price: order_price,
             order_qty: order_qty
@@ -572,7 +572,7 @@ class Bitmusa {
         
     }
 
-    async closeFuturePosition(targetSymbol = null, baseSymbol = "TUSDT", margin_mode = 0, position = "buy", order_type = 1, leverage = 10, order_price = 1, order_qty = 0) {
+    async closeFuturePosition(targetSymbol = null, baseSymbol = "TUSDT", margin_mode = 0, position = "BUY", order_type = 1, leverage = 10, order_price = 1, order_qty = 0) {
         const funcName = '[closeFuturePosition]:';
 
         if (!targetSymbol) throw new Error(`${funcName} targetSymbol is blank`);
@@ -588,9 +588,9 @@ class Bitmusa {
         var options = {
             direction: 0, // 0: Open, 1: Close
             ticker: `${pair}`,
-            margin_mode: margin_mode,
-            position: position,
-            order_type: order_type,
+            margin_mode: margin_mode, // ISOLATED(0), CROSS(1)
+            position: position, // BUY - Long(0), SELL - Short(1)
+            order_type: order_type, // 0: Market, 1: Limit
             leverage: leverage,
             order_price: order_price,
             order_qty: order_qty
